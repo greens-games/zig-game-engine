@@ -1,0 +1,50 @@
+    const temp = glfw.glfwInit();
+
+    if (temp == 0) {
+        return std.debug.print("Failed to initialize GLFW\n", .{});
+    }
+    print("Creating window", .{});
+    const window = glfw.glfwCreateWindow(640, 480, "Yo", null, null);
+    _ = glfw.glfwSetErrorCallback(errs.errorCallback) orelse null;
+    glfw.glfwMakeContextCurrent(window);
+
+    _ = gl.gladLoadGL(glfw.glfwGetProcAddress);
+
+    if (window == null) {
+        return print("Failed to create window\n", .{});
+    }
+    defer glfw.glfwDestroyWindow(window);
+
+    _ = glfw.glfwSetKeyCallback(window, input.exit_callback);
+
+    // Vertex buffer
+    var vert_buff: [9]f32 = [_]f32{
+        -0.5, -0.5, 0.0,
+        0.5,  -0.5, 0.0,
+        0.0,  0.5,  0.0,
+    };
+    const opaque_ptr: ?*anyopaque = @ptrCast(&vert_buff);
+    var vbo: gl.GLuint = 0;
+    gl.glGenBuffers(1, &vbo);
+    gl.glBindBuffer(gl.GL_ARRAY_BUFFER, vbo);
+    gl.glBufferData(gl.GL_ARRAY_BUFFER, 9 * @sizeOf(f32), opaque_ptr, gl.GL_STATIC_DRAW);
+
+    // Vertex array object
+    var vao: gl.GLuint = 0;
+    gl.glGenVertexArrays(1, &vao);
+    gl.glBindVertexArray(vao);
+    gl.glEnableVertexArrayAttrib(0, 0);
+    gl.glBindBuffer(gl.GL_ARRAY_BUFFER, vbo);
+    gl.glVertexAttribPointer(0, 3, gl.GL_FLOAT, gl.GL_FALSE, 0, null);
+
+    // Shader
+    const vertex_shader: [*c]const [*c]const u8 = "#version 400\n in vec3 vp; void main() { gl_Position = vec4(vp, 1.0);}";
+    const vs: gl.GLuint = gl.glCreateShader(gl.GL_VERTEX_SHADER);
+    gl.glShaderSource(vs, 1, &vertex_shader, null);
+    gl.glCompileShader(vs);
+
+    while (glfw.glfwWindowShouldClose(window) == 0) {
+        glfw.glfwPollEvents();
+    }
+
+

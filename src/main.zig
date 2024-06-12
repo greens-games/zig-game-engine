@@ -1,35 +1,37 @@
 const std = @import("std");
-const glfw = @cImport(@cInclude("/home/matt/dev/glfw/include/GLFW/glfw3.h"));
-const gl = @cImport(@cInclude("/home/matt/dev/glad/include/glad/gl.h"));
+const glfw = @import("mach-glfw");
+const gl = @import("gl");
 const errs = @import("error/error.zig");
 const input = @import("event/input.zig");
 const print = std.debug.print;
 
+/// Default GLFW error handling callback
+fn errorCallback(error_code: glfw.ErrorCode, description: [:0]const u8) void {
+    std.log.err("glfw: {}: {s}\n", .{ error_code, description });
+}
+
 pub fn main() !void {
-    const temp = glfw.glfwInit();
+    try errs.something();
 
-    if (temp == 0) {
-        return std.debug.print("Failed to initialize GLFW\n", .{});
+    glfw.setErrorCallback(errorCallback);
+    if (!glfw.init(.{})) {
+        std.log.err("failed to initialize GLFW: {?s}", .{glfw.getErrorString()});
+        std.process.exit(1);
     }
-    print("Creating window", .{});
-    const window = glfw.glfwCreateWindow(640, 480, "Yo", null, null);
-    _ = glfw.glfwSetErrorCallback(errs.errorCallback) orelse null;
-    glfw.glfwMakeContextCurrent(window);
+    defer glfw.terminate();
 
-    _ = gl.gladLoadGL(glfw.glfwGetProcAddress);
+    // Create our window
+    const window = glfw.Window.create(640, 480, "Hello, mach-glfw!", null, null, .{}) orelse {
+        std.log.err("failed to create GLFW window: {?s}", .{glfw.getErrorString()});
+        std.process.exit(1);
+    };
+    defer window.destroy();
 
-    if (window == null) {
-        return print("Failed to create window\n", .{});
+    // Wait for the user to close the window.
+    while (!window.shouldClose()) {
+        window.swapBuffers();
+        glfw.pollEvents();
     }
-    defer glfw.glfwDestroyWindow(window);
-
-    _ = glfw.glfwSetKeyCallback(window, input.exit_callback);
-
-    while (glfw.glfwWindowShouldClose(window) == 0) {
-        glfw.glfwPollEvents();
-    }
-
-    print("We made it to the end\n", .{});
 }
 
 test "simple test" {
