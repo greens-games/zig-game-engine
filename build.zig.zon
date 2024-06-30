@@ -11,6 +11,14 @@
             .url = "https://github.com/castholm/zigglgen/releases/download/v0.2.3/zigglgen.tar.gz",
             .hash = "1220f4188a5e1bdbb15fd50e9ea322c0721384eeba9bc077e4179b0b0eeaa7fe4ad9",
         },
+        .@"raylib-zig" = .{
+            .url = "https://github.com/Not-Nik/raylib-zig/archive/devel.tar.gz",
+            .hash = "1220f7489d0946ca7ea7ffec154041cb862066491f789c2a5f823191ed325d4c37ef", // put the actual hash here
+        },
+        .zigimg = .{
+            .url = "https://github.com/zigimg/zigimg/archive/588f11f24cdc3b12f46082217dc830436b7f325e.tar.gz",
+            .hash = "1220dc313944ea71a87b4f54f26b1427ad2992a721a221cb42f7f80b8eee4e4944b7",
+        },
     },
 
     .paths = .{

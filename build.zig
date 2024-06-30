@@ -31,13 +31,13 @@ pub fn build(b: *std.Build) void {
     // Choose the OpenGL API, version, profile and extensions you want to generate bindings for.
     const gl_bindings = @import("zigglgen").generateBindingsModule(b, .{
         .api = .gl,
-        .version = .@"4.1",
+        .version = .@"4.6",
         .profile = .core,
         .extensions = &.{ .ARB_clip_control, .NV_scissor_exclusive },
     });
 
     // Import the generated module.
-    exe.root_module.addImport("gl", gl_bindings);
+    exe.root_module.addImport("ziggl", gl_bindings);
 
     //Mach GLFW
     const glfw_dep = b.dependency("mach_glfw", .{
@@ -45,6 +45,14 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     exe.root_module.addImport("mach-glfw", glfw_dep.module("mach-glfw"));
+
+    //zigimg
+    const zigimg_dependency = b.dependency("zigimg", .{
+        .target = target,
+        .optimize = optimize,
+    });
+
+    exe.root_module.addImport("zigimg", zigimg_dependency.module("zigimg"));
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);
@@ -72,6 +80,23 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    // Choose the OpenGL API, version, profile and extensions you want to generate bindings for.
+    const gl_bindings_test = @import("zigglgen").generateBindingsModule(b, .{
+        .api = .gl,
+        .version = .@"4.1",
+        .profile = .core,
+        .extensions = &.{ .ARB_clip_control, .NV_scissor_exclusive },
+    });
+
+    // Import the generated module.
+    exe_unit_tests.root_module.addImport("ziggl", gl_bindings_test);
+
+    //Mach GLFW
+    const glfw_dep_test = b.dependency("mach_glfw", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    exe_unit_tests.root_module.addImport("mach-glfw", glfw_dep_test.module("mach-glfw"));
     const run_exe_unit_tests = b.addRunArtifact(exe_unit_tests);
 
     const test_step = b.step("test", "Run unit tests");
