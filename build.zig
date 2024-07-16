@@ -5,6 +5,43 @@ pub fn build(b: *std.Build) void {
 
     const optimize = b.standardOptimizeOption(.{});
 
+    //dependencies
+
+    //zigimg
+    const zigimg_dependency = b.dependency("zigimg", .{
+        .target = target,
+        .optimize = optimize,
+    });
+
+    // Choose the OpenGL API, version, profile and extensions you want to generate bindings for.
+    const gl_bindings = @import("zigglgen").generateBindingsModule(b, .{
+        .api = .gl,
+        .version = .@"4.6",
+        .profile = .core,
+        .extensions = &.{ .ARB_clip_control, .NV_scissor_exclusive },
+    });
+
+    //Mach GLFW
+    const glfw_dep = b.dependency("mach_glfw", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    //create module
+    const module = b.addModule("engine", .{
+        .root_source_file = .{ .src_path = .{
+            .owner = b,
+            .sub_path = "src/mod.zig",
+        } },
+        .target = target,
+        .optimize = optimize,
+    });
+
+    module.addImport("ziggl", gl_bindings);
+
+    module.addImport("mach-glfw", glfw_dep.module("mach-glfw"));
+
+    module.addImport("zigimg", zigimg_dependency.module("zigimg"));
+
     const lib = b.addStaticLibrary(.{
         .name = "zig-last-try",
 
@@ -28,29 +65,10 @@ pub fn build(b: *std.Build) void {
     //exe.addCSourceFile(.{ .file = b.path("../../utils/glad/src/gl.c") });
     //exe.linkLibC();
 
-    // Choose the OpenGL API, version, profile and extensions you want to generate bindings for.
-    const gl_bindings = @import("zigglgen").generateBindingsModule(b, .{
-        .api = .gl,
-        .version = .@"4.6",
-        .profile = .core,
-        .extensions = &.{ .ARB_clip_control, .NV_scissor_exclusive },
-    });
-
     // Import the generated module.
     exe.root_module.addImport("ziggl", gl_bindings);
 
-    //Mach GLFW
-    const glfw_dep = b.dependency("mach_glfw", .{
-        .target = target,
-        .optimize = optimize,
-    });
     exe.root_module.addImport("mach-glfw", glfw_dep.module("mach-glfw"));
-
-    //zigimg
-    const zigimg_dependency = b.dependency("zigimg", .{
-        .target = target,
-        .optimize = optimize,
-    });
 
     exe.root_module.addImport("zigimg", zigimg_dependency.module("zigimg"));
     b.installArtifact(exe);
