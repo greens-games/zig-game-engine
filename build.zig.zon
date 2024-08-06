@@ -13,14 +13,13 @@
         },
         .@"raylib-zig" = .{
             .url = "https://github.com/Not-Nik/raylib-zig/archive/devel.tar.gz",
-            .hash = "1220f7489d0946ca7ea7ffec154041cb862066491f789c2a5f823191ed325d4c37ef", // put the actual hash here
+            .hash = "122064a960fff658211413c4b3b56e1699719126c3d099d3ed43f9eaff17a936ad91", // put the actual hash here
         },
         .zigimg = .{
             .url = "https://github.com/zigimg/zigimg/archive/588f11f24cdc3b12f46082217dc830436b7f325e.tar.gz",
             .hash = "1220dc313944ea71a87b4f54f26b1427ad2992a721a221cb42f7f80b8eee4e4944b7",
         },
     },
-
     .paths = .{
         "build.zig",
         "build.zig.zon",

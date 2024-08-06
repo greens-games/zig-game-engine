@@ -21,7 +21,10 @@ fn create_program(vert_shader_source: []const u8, frag_shader_source: []const u8
 
 pub fn create_program_from_file() !gl.uint {
     //read in files for shader source
-    var f = try std.fs.openFileAbsolute("/home/matthewgreen/dev/game-engine-zig/src/shaders/basic_vertex.glsl", .{});
+    //Linux
+    //var f = try std.fs.openFileAbsolute("/home/matthewgreen/dev/game-engine-zig/src/shaders/basic_vertex.glsl", .{});
+    //Windows
+    var f = try std.fs.openFileAbsolute("C:/Development/zig-game-engine/src/shaders/basic_vertex.glsl", .{});
     defer f.close();
     var reader = std.fs.File.reader(f);
     var buf: [1024]u8 = undefined;
