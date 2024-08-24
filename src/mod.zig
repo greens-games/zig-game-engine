@@ -19,3 +19,4 @@
 pub const game = @import("core/game.zig");
 pub const world = @import("core/world.zig");
 pub const entity = @import("ecs/entity.zig");
+pub const rl_render = @import("renderer/raylib_renderer.zig");

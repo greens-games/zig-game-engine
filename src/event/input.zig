@@ -8,6 +8,7 @@ const Events = @import("event.zig");
 pub fn hot_reload(window: glfw.Window, key: glfw.Key, scancode: i32, action: glfw.Action, mods: glfw.Mods) void {
     _ = window;
     std.debug.print("Key: {?}; ScanCode: {?}; Action: {?}; Mods: {?}\n", .{ key, scancode, action, mods });
+
     if (key == glfw.Key.r) {
         if (action == glfw.Action.press) {
             gl.UseProgram(0);
@@ -23,14 +24,7 @@ pub fn mouse_callback(window: glfw.Window, button: glfw.MouseButton, action: glf
     _ = window;
     //When a mouse button is pressed
     //We create a mouse input event
-    const event: Events.MouseEvent = .{
-        .button = button,
-        .action = action,
-        .mods = mods,
-    };
 
-    const something: Events.MouseEventNode = .{ .data = event };
-    _ = something;
     //set the values of the event struct to what was pressed
     std.debug.print("Button: {?}; Action: {?}; Mods: {?}\n", .{ button, action, mods });
 }

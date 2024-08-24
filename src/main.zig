@@ -7,15 +7,17 @@ pub const World = @import("core/world.zig");
 const Entity = @import("ecs/entity.zig");
 const Events = @import("event/event.zig");
 const any_type = @import("for_fun/any_type.zig");
+const rl_render = @import("renderer/raylib_renderer.zig");
+const System = @import("ecs/system.zig");
 
 //glfw is for input
 //gl is for drawing
 pub fn main() !void {
     //try run_ascii_game();
-    //
-    var game: Game = Game{};
-    game.setUp().run();
+    var game: Game = .{};
+    game.setUp(Game.ChosenRenderer.raylib).run();
     defer game.cleanUp();
+    //try rl_render.raylib_entry();
 }
 
 fn run_ascii_game() !void {}
@@ -41,4 +43,5 @@ test "all" {
     std.testing.refAllDecls(any_type);
     std.testing.refAllDecls(Entity);
     std.testing.refAllDecls(Events);
+    std.testing.refAllDecls(System);
 }

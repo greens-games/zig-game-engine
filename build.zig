@@ -5,7 +5,14 @@ pub fn build(b: *std.Build) void {
 
     const optimize = b.standardOptimizeOption(.{});
 
-    //dependencies
+    //Deps
+    const raylib_dep = b.dependency("raylib-zig", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    const raylib = raylib_dep.module("raylib"); // main raylib module
+    const raygui = raylib_dep.module("raygui"); // raygui module
+    const raylib_artifact = raylib_dep.artifact("raylib"); // raylib C library
 
     //zigimg
     const zigimg_dependency = b.dependency("zigimg", .{
@@ -42,6 +49,10 @@ pub fn build(b: *std.Build) void {
 
     module.addImport("zigimg", zigimg_dependency.module("zigimg"));
 
+    module.linkLibrary(raylib_artifact);
+    module.addImport("raylib", raylib);
+    module.addImport("raygui", raygui);
+
     const lib = b.addStaticLibrary(.{
         .name = "zig-last-try",
 
@@ -66,11 +77,14 @@ pub fn build(b: *std.Build) void {
     //exe.linkLibC();
 
     // Import the generated module.
+    exe.linkLibrary(raylib_artifact);
     exe.root_module.addImport("ziggl", gl_bindings);
 
     exe.root_module.addImport("mach-glfw", glfw_dep.module("mach-glfw"));
 
     exe.root_module.addImport("zigimg", zigimg_dependency.module("zigimg"));
+    exe.root_module.addImport("raylib", raylib);
+    exe.root_module.addImport("raygui", raygui);
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);

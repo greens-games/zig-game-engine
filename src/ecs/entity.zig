@@ -26,3 +26,20 @@ test "component pointer" {
     //try entity.add_component(test_comp);
     try std.testing.expect(1 == 1);
 }
+
+const SomeStruct = struct {
+    x: u32,
+
+    pub fn addOne(self: *SomeStruct) void {
+        self.x += 1;
+    }
+};
+fn takesAnyType(some_ptr: *anyopaque, some_type: anytype) void {
+    const given_struct: *some_type = @ptrCast(@alignCast(some_ptr));
+    given_struct.addOne();
+}
+test "anytype testing" {
+    var test1: SomeStruct = .{ .x = 1 };
+    takesAnyType(&test1, SomeStruct);
+    try std.testing.expect(test1.x == 2);
+}

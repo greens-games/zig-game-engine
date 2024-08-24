@@ -3,6 +3,8 @@ const glfw = @import("mach-glfw");
 const gl = @import("ziggl");
 const errs = @import("../error/error.zig");
 
+const rl = @import("raylib");
+
 pub fn init_glfw(width: u32, height: u32) glfw.Window {
     glfw.setErrorCallback(errs.errorCallback);
     if (!glfw.init(.{})) {
@@ -24,6 +26,14 @@ pub fn init_glfw(width: u32, height: u32) glfw.Window {
     glfw.swapInterval(1);
 
     return window;
+}
+
+pub fn initRaylib(width: i32, height: i32) void {
+    rl.initWindow(width, height, "Green's Engine");
+}
+
+pub fn raylibCleanUp() void {
+    defer rl.closeWindow();
 }
 
 pub fn clean_up(window: glfw.Window) void {

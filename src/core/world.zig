@@ -1,20 +1,16 @@
 const std = @import("std");
-const Entity = @import("../ecs/entity.zig").Entity;
+const ArrayList = std.ArrayList;
+const allocator = std.heap.page_allocator;
+const Sprites = @import("../ecs/components/sprite.zig");
+const Characters = @import("../ecs/components/character.zig");
 
-/// What does a world have?
-///     entities
-///     table for components to lookup
-///     scene?
-///
-pub const World = struct {};
-///Need to know:
-/// What to spawn
-/// Where to spawn
-///
-/// World.spawn(entity)
-/// Takes in some entity, and an entity has n number of components attached
-/// Adds this entity to the world and process any component data necessary for "spawning" like Position, texture, etc...
-pub fn spawn(entity: Entity) void {
-    _ = entity;
-    return;
-}
+/// Kepps track of the current world state
+pub const World = struct {
+    sprites: ArrayList(*Sprites.GeometricSprite) = ArrayList(*Sprites.GeometricSprite).init(allocator),
+    characters: ArrayList(*Characters.Character) = ArrayList(*Characters.Character).init(allocator),
+
+    pub fn spawn_character(self: *World, character: Characters.Character) u32 {
+        self.characters.append(character) catch @panic("Failed to add character");
+        return self.characters.items.len - 1;
+    }
+};
