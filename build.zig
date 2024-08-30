@@ -129,6 +129,8 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     exe_unit_tests.root_module.addImport("mach-glfw", glfw_dep_test.module("mach-glfw"));
+    exe_unit_tests.root_module.addImport("raylib", raylib);
+    exe_unit_tests.root_module.addImport("raygui", raygui);
     const run_exe_unit_tests = b.addRunArtifact(exe_unit_tests);
 
     const test_step = b.step("test", "Run unit tests");

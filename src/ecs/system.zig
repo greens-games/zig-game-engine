@@ -18,5 +18,4 @@ test "Add System" {
     var game: *Game = .{};
     var example_system: ExampleSystem = .{ .param1 = 5, .param2 = 1 };
     game.addSystem(&example_system, @TypeOf(example_system));
-    std.AutoHashMap(comptime K: type, comptime V: type)
 }

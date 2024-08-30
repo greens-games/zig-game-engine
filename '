@@ -13,7 +13,6 @@ const setup = @import("../init/setup.zig");
 const Events = @import("../event/event.zig");
 const World = @import("world.zig").World;
 const InitSystem = @import("../ecs/systems/init_system.zig");
-const Characters = @import("../ecs/components/character.zig");
 
 //Systems
 var gl_procs: gl.ProcTable = undefined;
@@ -94,6 +93,13 @@ pub const Game = struct {
         //Run setup systems
         InitSystem.spawn_team(&world);
 
+        var first_member: Characters.Character = .{
+            .class_id = 0,
+            .x = 1,
+            .y = 1,
+            .hp = 10,
+            .color = Color.blue,
+        };
         // Main game loop
         while (!rl.windowShouldClose()) {
             rl.beginDrawing();

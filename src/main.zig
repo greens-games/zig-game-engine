@@ -9,6 +9,7 @@ const Events = @import("event/event.zig");
 const any_type = @import("for_fun/any_type.zig");
 const rl_render = @import("renderer/raylib_renderer.zig");
 const System = @import("ecs/system.zig");
+const InitSystem = @import("ecs/systems/init_system.zig");
 
 //glfw is for input
 //gl is for drawing
@@ -43,5 +44,5 @@ test "all" {
     std.testing.refAllDecls(any_type);
     std.testing.refAllDecls(Entity);
     std.testing.refAllDecls(Events);
-    std.testing.refAllDecls(System);
+    std.testing.refAllDecls(InitSystem);
 }
