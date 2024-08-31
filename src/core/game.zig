@@ -13,7 +13,9 @@ const setup = @import("../init/setup.zig");
 const Events = @import("../event/event.zig");
 const World = @import("world.zig").World;
 const InitSystem = @import("../ecs/systems/init_system.zig");
+const CreatureSystems = @import("../ecs/systems/creature_systems.zig");
 const Characters = @import("../ecs/components/character.zig");
+const Renderer = @import("../renderer/renderer.zig").RaylibRenderer;
 
 //Systems
 var gl_procs: gl.ProcTable = undefined;
@@ -92,13 +94,22 @@ pub const Game = struct {
         rl.setTargetFPS(60);
         var world: World = .{};
         //Run setup systems
-        InitSystem.spawn_team(&world);
+        {
+            InitSystem.spawn_team(&world);
+        }
 
         // Main game loop
         while (!rl.windowShouldClose()) {
             rl.beginDrawing();
             defer rl.endDrawing();
-            InitSystem.draw_team(&world);
+            //run systems
+            {
+                CreatureSystems.detect_hover(world.characters);
+            }
+            //run rendering
+            {
+                Renderer.draw_team(&world);
+            }
             rl.clearBackground(rl.Color.white);
         }
     }

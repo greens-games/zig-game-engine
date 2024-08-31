@@ -23,9 +23,9 @@ pub fn create_program_from_file() !gl.uint {
     //read in files for shader source
     //Linux
     //var f = try std.fs.openFileAbsolute("/home/matthewgreen/dev/game-engine-zig/src/shaders/basic_vertex.glsl", .{});
-    //var f = try std.fs.openFileAbsolute("/home/oem/dev/zig-game-engine/src/shaders/basic_vertex.glsl", .{});
+    var f = try std.fs.openFileAbsolute("/home/oem/dev/zig-game-engine/src/shaders/basic_vertex.glsl", .{});
     //Windows
-    var f = try std.fs.openFileAbsolute("C:/Development/zig-game-engine/src/shaders/basic_vertex.glsl", .{});
+    //var f = try std.fs.openFileAbsolute("C:/Development/zig-game-engine/src/shaders/basic_vertex.glsl", .{});
     defer f.close();
     var reader = std.fs.File.reader(f);
     var buf: [1024]u8 = undefined;
