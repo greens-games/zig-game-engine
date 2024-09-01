@@ -9,6 +9,7 @@ const Characters = @import("../ecs/components/character.zig");
 const Color = @import("raylib").Color;
 const rl = @import("raylib");
 
+///OpenGL renderer
 pub const Renderer = struct {
     pub fn draw(vao: VertexArray, ibo: IndexBuffer, shader: c_uint) void {
         gl.UseProgram(shader);
@@ -26,9 +27,23 @@ pub const Renderer = struct {
 };
 
 pub const RaylibRenderer = struct {
-    pub fn draw_team(world: *World) void {
+    //Squares draw origin in top left
+    pub fn drawTeam(world: *World) void {
         for (world.characters.items) |character| {
             rl.drawRectangle(character.x, character.y, 16, 16, character.color);
+        }
+    }
+
+    pub fn drawGrid() void {
+        _ = rl.getScreenHeight();
+        var r: i32 = 0;
+        while (r <= rl.getScreenHeight()) {
+            var c: i32 = 0;
+            while (c <= rl.getScreenWidth()) {
+                rl.drawRectangleLines(c, r, 16, 16, Color.black);
+                c += 16;
+            }
+            r += 16;
         }
     }
 };

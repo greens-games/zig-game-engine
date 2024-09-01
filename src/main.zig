@@ -40,6 +40,23 @@ test "simple test" {
     try std.testing.expectEqual(@as(i32, 42), list.pop());
 }
 
+test "test some list stuff" {
+    const Something = struct {
+        x: i32 = 0,
+        y: i32 = 0,
+    };
+
+    var list = std.ArrayList(Something).init(std.testing.allocator);
+    defer list.deinit();
+
+    const something1: Something = .{};
+    try list.append(something1);
+    try std.testing.expect(list.items.len == 1);
+    try std.testing.expect(list.items[0].x == 0);
+    list.items[0].x += 1;
+    try std.testing.expect(list.items[0].x == 1);
+}
+
 test "all" {
     std.testing.refAllDecls(any_type);
     std.testing.refAllDecls(Entity);

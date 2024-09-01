@@ -13,7 +13,7 @@ const setup = @import("../init/setup.zig");
 const Events = @import("../event/event.zig");
 const World = @import("world.zig").World;
 const InitSystem = @import("../ecs/systems/init_system.zig");
-const CreatureSystems = @import("../ecs/systems/creature_systems.zig");
+const CharacterSystems = @import("../ecs/systems/character_systems.zig");
 const Characters = @import("../ecs/components/character.zig");
 const Renderer = @import("../renderer/renderer.zig").RaylibRenderer;
 
@@ -95,7 +95,8 @@ pub const Game = struct {
         var world: World = .{};
         //Run setup systems
         {
-            InitSystem.spawn_team(&world);
+            //Init Map
+            InitSystem.spawnTeam(&world);
         }
 
         // Main game loop
@@ -104,11 +105,13 @@ pub const Game = struct {
             defer rl.endDrawing();
             //run systems
             {
-                CreatureSystems.detect_hover(world.characters);
+                CharacterSystems.detectHover(world.characters);
+                CharacterSystems.moveCharacter(world.characters);
             }
             //run rendering
             {
-                Renderer.draw_team(&world);
+                Renderer.drawGrid();
+                Renderer.drawTeam(&world);
             }
             rl.clearBackground(rl.Color.white);
         }
