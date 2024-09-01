@@ -62,4 +62,5 @@ test "all" {
     std.testing.refAllDecls(Entity);
     std.testing.refAllDecls(Events);
     std.testing.refAllDecls(InitSystem);
+    std.testing.refAllDecls(World);
 }
