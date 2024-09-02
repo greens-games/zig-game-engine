@@ -4,10 +4,10 @@ const VertexArray = @import("vertex_array.zig").VertexArray;
 const IndexBuffer = @import("index_buffer.zig").IndexBuffer;
 const shader_loader = @import("../shaders/shader_loader.zig");
 
-const World = @import("../core/world.zig").World;
-const Characters = @import("../ecs/components/character.zig");
+const World = @import("../engine/core/world.zig").World;
 const Color = @import("raylib").Color;
 const rl = @import("raylib");
+const Constants = @import("../engine/core/constants.zig");
 
 ///OpenGL renderer
 pub const Renderer = struct {
@@ -30,7 +30,7 @@ pub const RaylibRenderer = struct {
     //Squares draw origin in top left
     pub fn drawTeam(world: *World) void {
         for (world.characters.items) |character| {
-            rl.drawRectangle(character.x, character.y, 16, 16, character.color);
+            rl.drawRectangle(character.position.x, character.position.y, Constants.CELL_W, Constants.CELL_H, character.color);
         }
     }
 
@@ -40,10 +40,10 @@ pub const RaylibRenderer = struct {
         while (r <= rl.getScreenHeight()) {
             var c: i32 = 0;
             while (c <= rl.getScreenWidth()) {
-                rl.drawRectangleLines(c, r, 16, 16, Color.black);
-                c += 16;
+                rl.drawRectangleLines(c, r, Constants.CELL_W, Constants.CELL_H, Color.black);
+                c += Constants.CELL_W;
             }
-            r += 16;
+            r += Constants.CELL_H;
         }
     }
 };

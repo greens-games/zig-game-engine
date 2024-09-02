@@ -2,20 +2,20 @@ const std = @import("std");
 const ArrayList = std.ArrayList;
 const gl = @import("ziggl");
 const glfw = @import("mach-glfw");
-const shader_loader = @import("../shaders/shader_loader.zig");
-const input = @import("../event/input.zig");
+const shader_loader = @import("../../shaders/shader_loader.zig");
+const input = @import("../../event/input.zig");
 
 const rl = @import("raylib");
 
 //probably get moved out
-const errs = @import("../error/error.zig");
-const setup = @import("../init/setup.zig");
-const Events = @import("../event/event.zig");
+const errs = @import("../../error/error.zig");
+const setup = @import("../../init/setup.zig");
+const Events = @import("../../event/event.zig");
 const World = @import("world.zig").World;
-const InitSystem = @import("../ecs/systems/init_system.zig");
-const CharacterSystems = @import("../ecs/systems/character_systems.zig");
-const Characters = @import("../ecs/components/character.zig");
-const Renderer = @import("../renderer/renderer.zig").RaylibRenderer;
+const InitSystem = @import("../../example_game/systems/init_system.zig");
+const CharacterSystems = @import("../../example_game/systems/character_systems.zig");
+const Characters = @import("../../example_game/components/character.zig");
+const Renderer = @import("../../renderer/renderer.zig").RaylibRenderer;
 
 //Systems
 var gl_procs: gl.ProcTable = undefined;

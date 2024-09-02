@@ -2,14 +2,13 @@ const std = @import("std");
 
 //main is our module source
 //Anything we want a consumer to be able to use should be imported into main and marked pub
-pub const Game = @import("core/game.zig").Game;
-pub const World = @import("core/world.zig");
-const Entity = @import("ecs/entity.zig");
+pub const Game = @import("engine/core/game.zig").Game;
+pub const World = @import("engine/core/world.zig");
+const Entity = @import("engine/ecs/entity.zig");
 const Events = @import("event/event.zig");
 const any_type = @import("for_fun/any_type.zig");
 const rl_render = @import("renderer/raylib_renderer.zig");
-const System = @import("ecs/system.zig");
-const InitSystem = @import("ecs/systems/init_system.zig");
+const System = @import("engine/ecs/system.zig");
 
 //glfw is for input
 //gl is for drawing
@@ -61,6 +60,5 @@ test "all" {
     std.testing.refAllDecls(any_type);
     std.testing.refAllDecls(Entity);
     std.testing.refAllDecls(Events);
-    std.testing.refAllDecls(InitSystem);
     std.testing.refAllDecls(World);
 }

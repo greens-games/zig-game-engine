@@ -1,6 +1,7 @@
 const std = @import("std");
 const allocator = std.heap.page_allocator;
 const rl = @import("raylib");
+const Vector2 = @import("../../engine/core/types.zig").Vector2;
 pub const Character = struct {
     //Entity ID
     character_id: u32 = 0,
@@ -8,8 +9,7 @@ pub const Character = struct {
     hp: u32,
     class_id: u32,
     //Transform component
-    x: i32,
-    y: i32,
+    position: Vector2,
     //SPrite component
     //TODO: Replace with img/animation etc...
     color: rl.Color,

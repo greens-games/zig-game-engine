@@ -1,5 +1,5 @@
 const std = @import("std");
-const Events = @import("../event/event.zig");
+const Events = @import("../../event/event.zig");
 const Game = @import("../core/game.zig").Game;
 ///System will be a struct
 ///Update func gets called
