@@ -4,6 +4,7 @@ const allocator = std.heap.page_allocator;
 const Sprites = @import("../../example_game/components/sprite.zig");
 const Characters = @import("../../example_game/components/character.zig");
 const Tile = @import("../../example_game/components/tile.zig").Tile;
+const TileClickEvent = @import("../../example_game/components/tile_events.zig").TileClickEvent;
 const Color = @import("raylib").Color;
 const Vector2 = @import("types.zig").Vector2;
 const Constants = @import("../core/constants.zig");

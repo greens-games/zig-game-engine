@@ -12,10 +12,14 @@ const errs = @import("../../error/error.zig");
 const setup = @import("../../init/setup.zig");
 const Events = @import("../../event/event.zig");
 const World = @import("world.zig").World;
+const Renderer = @import("../../renderer/renderer.zig").RaylibRenderer;
+
+//FROM EXAMPLE GAME
 const InitSystem = @import("../../example_game/systems/init_system.zig");
 const CharacterSystems = @import("../../example_game/systems/character_systems.zig");
 const Characters = @import("../../example_game/components/character.zig");
-const Renderer = @import("../../renderer/renderer.zig").RaylibRenderer;
+const TileEventSystem = @import("../../example_game/events/tile_events.zig");
+const InputSystem = @import("../../example_game/systems/input_systems.zig");
 
 //Systems
 var gl_procs: gl.ProcTable = undefined;
@@ -93,10 +97,14 @@ pub const Game = struct {
         _ = self;
         rl.setTargetFPS(60);
         var world: World = .{};
+        var tile_event_system: TileEventSystem = .{};
+        var tile_event_producer: TileEventSystem.TileClickEventProducer = .{};
+        tile_event_producer.init() catch @panic("Failed to add to producer");
         //Run setup systems
         {
             //Init Map
             InitSystem.spawnTeam(&world);
+            InitSystem.spawnTiles(&world);
         }
 
         // Main game loop
@@ -105,6 +113,8 @@ pub const Game = struct {
             defer rl.endDrawing();
             //run systems
             {
+                InputSystem.handleMouseInput(world, &tile_event_producer);
+                tile_event_system.update();
                 CharacterSystems.detectHover(world.characters);
                 CharacterSystems.moveCharacter(world.characters);
             }

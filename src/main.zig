@@ -9,6 +9,7 @@ const Events = @import("event/event.zig");
 const any_type = @import("for_fun/any_type.zig");
 const rl_render = @import("renderer/raylib_renderer.zig");
 const System = @import("engine/ecs/system.zig");
+const TileEvents = @import("example_game/events/tile_events.zig");
 
 //glfw is for input
 //gl is for drawing
@@ -61,4 +62,5 @@ test "all" {
     std.testing.refAllDecls(Entity);
     std.testing.refAllDecls(Events);
     std.testing.refAllDecls(World);
+    std.testing.refAllDecls(TileEvents);
 }

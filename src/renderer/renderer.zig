@@ -35,7 +35,6 @@ pub const RaylibRenderer = struct {
     }
 
     pub fn drawGrid() void {
-        _ = rl.getScreenHeight();
         var r: i32 = 0;
         while (r <= rl.getScreenHeight()) {
             var c: i32 = 0;
