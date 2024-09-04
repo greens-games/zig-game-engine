@@ -76,6 +76,8 @@ test "other systems init" {
     var consumer: TileClickEventConsumer = .{};
     consumer.init() catch @panic("failed to initialize consumer");
 
+    var sys: @This() = .{};
+
     try std.testing.expect(producer.events.items.len == 0);
     try std.testing.expect(consumer.events.items.len == 0);
 
@@ -83,7 +85,7 @@ test "other systems init" {
     try producer.write(event);
 
     try std.testing.expect(producer.events.items.len == 1);
-    update();
+    sys.update();
 
     try std.testing.expect(producer.events.items.len == 0);
     try std.testing.expect(consumer.events.items.len == 1);

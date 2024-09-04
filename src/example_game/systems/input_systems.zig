@@ -21,13 +21,11 @@ pub fn handleMouseInput(world: World, tile_event_producer: *TileEventSystem.Tile
         // TODO: We could check if the position of the mouse collided with anything
         // For now let's assume it's a tile
         for (world.tiles.items) |tile| {
-            if (tile.col == mouse_rc.x) {
-                if (tile.row == mouse_rc.y) {
-                    //Create a tile click event
-                    const event: TileClickEvent = .{ .row = tile.row, .col = tile.col, .tile_type = tile.tile_type };
-                    tile_event_producer.write(event) catch @panic("Failed to add tile event to tile events");
-                    break;
-                }
+            if (tile.col == mouse_rc.x and tile.row == mouse_rc.y) {
+                //Create a tile click event
+                const event: TileClickEvent = .{ .row = tile.row, .col = tile.col, .tile_type = tile.tile_type };
+                tile_event_producer.write(event) catch @panic("Failed to add tile event to tile events");
+                break;
             }
         }
     }

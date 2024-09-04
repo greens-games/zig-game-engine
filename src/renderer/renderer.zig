@@ -45,4 +45,8 @@ pub const RaylibRenderer = struct {
             r += Constants.CELL_H;
         }
     }
+
+    pub fn drawSquare(x: i32, y: i32, color: rl.Color) void {
+        rl.drawRectangle(x, y, Constants.CELL_W, Constants.CELL_H, color);
+    }
 };

@@ -2,6 +2,7 @@ const std = @import("std");
 
 //main is our module source
 //Anything we want a consumer to be able to use should be imported into main and marked pub
+//Engine Specific
 pub const Game = @import("engine/core/game.zig").Game;
 pub const World = @import("engine/core/world.zig");
 const Entity = @import("engine/ecs/entity.zig");
@@ -9,6 +10,9 @@ const Events = @import("event/event.zig");
 const any_type = @import("for_fun/any_type.zig");
 const rl_render = @import("renderer/raylib_renderer.zig");
 const System = @import("engine/ecs/system.zig");
+const BFSearch = @import("engine/pathfinding/breadth_first.zig");
+
+//Game Specific
 const TileEvents = @import("example_game/events/tile_events.zig");
 
 //glfw is for input
@@ -63,4 +67,5 @@ test "all" {
     std.testing.refAllDecls(Events);
     std.testing.refAllDecls(World);
     std.testing.refAllDecls(TileEvents);
+    std.testing.refAllDecls(BFSearch);
 }
