@@ -1,7 +1,9 @@
-### Aug 23rd
-- Spawn an entity
-- add component to entity
-- Move entity using a system
+### Current TODO
+- Move player to target each frame
+- implement A*
+- Change the tiles list in World to multi D array/slice?
+    + This would allow for easier indexing when grabbing a single tile, and make A* better
+    + Either way we need an easy way to index into our tiles
 
 ### Main features
 - Hot reloading

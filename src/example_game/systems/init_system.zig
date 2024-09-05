@@ -32,8 +32,7 @@ pub fn spawnTiles(world: *World) void {
         var c: i32 = 0;
         while (c <= rl.getScreenWidth()) {
             const tile_rc = GridUtils.worldToGridCoords(c, r);
-            const tile: Tile = .{ .row = tile_rc.y, .col = tile_rc.x, .tile_type = TileType.GROUD };
-            world.tiles.append(tile) catch @panic("Failed to add type");
+            world.tiles[@intCast(tile_rc.y)][@intCast(tile_rc.x)] = TileType.GROUD;
             c += Constants.CELL_W;
         }
         r += Constants.CELL_H;

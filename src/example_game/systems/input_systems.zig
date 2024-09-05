@@ -20,7 +20,7 @@ pub fn handleMouseInput(world: World, tile_event_producer: *TileEventSystem.Tile
         //what did we click on?
         // TODO: We could check if the position of the mouse collided with anything
         // For now let's assume it's a tile
-        for (world.tiles.items) |tile| {
+        for (world.al_tiles.items) |tile| {
             if (tile.col == mouse_rc.x and tile.row == mouse_rc.y) {
                 //Create a tile click event
                 const event: TileClickEvent = .{ .row = tile.row, .col = tile.col, .tile_type = tile.tile_type };

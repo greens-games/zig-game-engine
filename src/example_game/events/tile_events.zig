@@ -1,3 +1,4 @@
+//TODO: This whole system will probably get rewritten
 const std = @import("std");
 const ArrayList = std.ArrayList;
 const KeyButton = @import("mach-glfw").MouseButton;
