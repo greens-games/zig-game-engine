@@ -13,4 +13,6 @@ pub const Character = struct {
     //SPrite component
     //TODO: Replace with img/animation etc...
     color: rl.Color,
+    //TargetPos component?
+    target_pos: Vector2,
 };

@@ -34,6 +34,12 @@ pub const RaylibRenderer = struct {
         }
     }
 
+    pub fn drawTargetPos(world: *World) void {
+        for (world.characters.items) |character| {
+            rl.drawRectangle(character.position.x, character.position.y, Constants.CELL_W, Constants.CELL_H, character.color);
+        }
+    }
+
     pub fn drawGrid() void {
         var r: i32 = 0;
         while (r <= rl.getScreenHeight()) {

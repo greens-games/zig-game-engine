@@ -49,11 +49,11 @@ fn popFront() TileClickEvent {
 pub const TileClickEventConsumer = struct {
     events: ArrayList(TileClickEvent) = ArrayList(TileClickEvent).init(std.heap.page_allocator),
 
-    fn init(self: *TileClickEventConsumer) !void {
+    pub fn init(self: *TileClickEventConsumer) !void {
         try key_consumer_list.append(self);
     }
 
-    fn receive(self: *TileClickEventConsumer, event: TileClickEvent) !void {
+    pub fn receive(self: *TileClickEventConsumer, event: TileClickEvent) !void {
         try self.events.append(event);
     }
 };
