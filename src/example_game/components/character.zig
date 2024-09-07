@@ -14,5 +14,5 @@ pub const Character = struct {
     //TODO: Replace with img/animation etc...
     color: rl.Color,
     //TargetPos component?
-    target_pos: Vector2,
+    target_pos: Vector2 = .{ .y = -1, .x = -1 },
 };

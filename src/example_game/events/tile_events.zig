@@ -13,8 +13,7 @@ var key_event_list: ArrayList(TileClickEvent) = ArrayList(TileClickEvent).init(s
 //If the consumer and producers are not Pointers once we add an item to their event lists when we iterate through them there is nothing in the list. Not sure why yet
 var key_consumer_list: ArrayList(*TileClickEventConsumer) = ArrayList(*TileClickEventConsumer).init(std.heap.page_allocator);
 var key_producer_list: ArrayList(*TileClickEventProducer) = ArrayList(*TileClickEventProducer).init(std.heap.page_allocator);
-pub fn update(self: @This()) void {
-    _ = self;
+pub fn update() void {
     for (key_producer_list.items) |producer| {
         if (producer.events.items.len > 0) {
             while (producer.events.popOrNull()) |event| {
@@ -54,6 +53,7 @@ pub const TileClickEventConsumer = struct {
     }
 
     pub fn receive(self: *TileClickEventConsumer, event: TileClickEvent) !void {
+        std.debug.print("adding event to consumer {?}\n", .{event});
         try self.events.append(event);
     }
 };
@@ -66,6 +66,7 @@ pub const TileClickEventProducer = struct {
     }
 
     pub fn write(self: *TileClickEventProducer, event: TileClickEvent) !void {
+        std.debug.print("adding event to producer{?}\n", .{event});
         try self.events.append(event);
     }
 };
@@ -77,7 +78,8 @@ test "other systems init" {
     var consumer: TileClickEventConsumer = .{};
     consumer.init() catch @panic("failed to initialize consumer");
 
-    var sys: @This() = .{};
+    const sys: @This() = .{};
+    _ = sys;
 
     try std.testing.expect(producer.events.items.len == 0);
     try std.testing.expect(consumer.events.items.len == 0);
@@ -86,7 +88,7 @@ test "other systems init" {
     try producer.write(event);
 
     try std.testing.expect(producer.events.items.len == 1);
-    sys.update();
+    update();
 
     try std.testing.expect(producer.events.items.len == 0);
     try std.testing.expect(consumer.events.items.len == 1);

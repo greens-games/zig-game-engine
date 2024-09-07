@@ -97,9 +97,11 @@ pub const Game = struct {
         _ = self;
         rl.setTargetFPS(60);
         var world: World = .{};
-        var tile_event_system: TileEventSystem = .{};
+        //var tile_event_system: TileEventSystem = .{};
         var tile_event_producer: TileEventSystem.TileClickEventProducer = .{};
+        var tile_event_consumer: TileEventSystem.TileClickEventConsumer = .{};
         tile_event_producer.init() catch @panic("Failed to add to producer");
+        tile_event_consumer.init() catch @panic("Failed to add to consumer");
         //Run setup systems
         {
             //Init Map
@@ -114,14 +116,16 @@ pub const Game = struct {
             //run systems
             {
                 InputSystem.handleMouseInput(world, &tile_event_producer);
-                tile_event_system.update();
+                TileEventSystem.update();
                 CharacterSystems.detectHover(world.characters);
-                CharacterSystems.moveCharacter(world.characters);
+                //CharacterSystems.moveCharacter(world.characters);
+                CharacterSystems.updateTargetPos(world.characters, &tile_event_consumer);
             }
             //run rendering
             {
                 Renderer.drawGrid();
                 Renderer.drawTeam(&world);
+                Renderer.drawTargetPos(world);
             }
             rl.clearBackground(rl.Color.white);
         }
