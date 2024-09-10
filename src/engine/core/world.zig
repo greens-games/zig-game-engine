@@ -36,5 +36,5 @@ test "test Tiles" {
 
     world.tiles[0][0] = TileType.GROUD;
 
-    try std.testing.expect(world.tiles[0][0].tile_type == .GROUD);
+    try std.testing.expect(world.tiles[0][0] == .GROUD);
 }

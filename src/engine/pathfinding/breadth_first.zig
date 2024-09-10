@@ -4,7 +4,7 @@ const Vector2 = @import("../core/types.zig").Vector2;
 pub fn search(start_pos: Vector2, end_pos: Vector2) std.ArrayList(Vector2) {
     const moves: std.ArrayList(Vector2) = std.ArrayList(Vector2).init(std.heap.page_allocator);
     //and start_pos.y != start_pos.y
-    while (start_pos.x != end_pos.x and start_pos.y != end_pos.y) {
+    while (!start_pos.eql(end_pos)) {
         break;
     }
 
