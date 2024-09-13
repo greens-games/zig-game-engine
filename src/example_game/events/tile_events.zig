@@ -53,7 +53,6 @@ pub const TileClickEventConsumer = struct {
     }
 
     pub fn receive(self: *TileClickEventConsumer, event: TileClickEvent) !void {
-        std.debug.print("adding event to consumer {?}\n", .{event});
         try self.events.append(event);
     }
 };
@@ -66,7 +65,6 @@ pub const TileClickEventProducer = struct {
     }
 
     pub fn write(self: *TileClickEventProducer, event: TileClickEvent) !void {
-        std.debug.print("adding event to producer{?}\n", .{event});
         try self.events.append(event);
     }
 };

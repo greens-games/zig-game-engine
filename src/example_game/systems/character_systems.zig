@@ -16,7 +16,6 @@ pub fn moveCharacter(characters: Arraylist(Character)) void {
     if (rl.isMouseButtonPressed(rl.MouseButton.mouse_button_left)) {
         const mouse_x = rl.getMouseX();
         const mouse_y = rl.getMouseY();
-        std.debug.print("Moving character to position: ({?}, {?})\n", .{ mouse_x, mouse_y });
         for (characters.items) |*character| {
             const row_col: Vector2 = GridUtils.worldToGridCoords(mouse_x, mouse_y);
             const new_pos: Vector2 = GridUtils.gridToWorldCoords(row_col.x, row_col.y);

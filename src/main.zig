@@ -11,6 +11,7 @@ const any_type = @import("for_fun/any_type.zig");
 const rl_render = @import("renderer/raylib_renderer.zig");
 const System = @import("engine/ecs/system.zig");
 const BFSearch = @import("engine/pathfinding/breadth_first.zig");
+const AStar = @import("engine/pathfinding/astar.zig");
 
 //Game Specific
 const TileEvents = @import("example_game/events/tile_events.zig");
@@ -62,10 +63,10 @@ test "test some list stuff" {
 }
 
 test "all" {
-    std.testing.refAllDecls(any_type);
     std.testing.refAllDecls(Entity);
     std.testing.refAllDecls(Events);
     std.testing.refAllDecls(World);
     std.testing.refAllDecls(TileEvents);
     std.testing.refAllDecls(BFSearch);
+    std.testing.refAllDecls(AStar);
 }
