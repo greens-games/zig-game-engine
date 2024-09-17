@@ -18,13 +18,13 @@ test "Grid to world coords" {
     try std.testing.expect(vec1.x == 0);
     try std.testing.expect(vec1.y == 0);
 
-    try std.testing.expect(vec2.y == 16);
-    try std.testing.expect(vec2.x == 32);
+    try std.testing.expect(vec2.y == 32);
+    try std.testing.expect(vec2.x == 64);
 }
 
 test "World to grid coords" {
     const vec1 = worldToGridCoords(1, 1);
-    const vec2 = worldToGridCoords(33, 16);
+    const vec2 = worldToGridCoords(65, 32);
 
     try std.testing.expect(vec1.x == 0);
     try std.testing.expect(vec1.y == 0);

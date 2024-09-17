@@ -15,7 +15,7 @@ pub const World = struct {
     sprites: ArrayList(Sprites.GeometricSprite) = ArrayList(Sprites.GeometricSprite).init(allocator),
     characters: ArrayList(Characters.Character) = ArrayList(Characters.Character).init(allocator),
     al_tiles: ArrayList(Tile) = ArrayList(Tile).init(allocator),
-    tiles: [100][100]TileType = undefined,
+    tiles: [100][]TileType = undefined,
 
     pub fn spawn_character(self: *World, character: Characters.Character) void {
 
@@ -34,7 +34,9 @@ pub const World = struct {
 test "test Tiles" {
     var world: World = .{};
 
-    world.tiles[0][0] = TileType.GROUD;
+    world.tiles[0] = try std.testing.allocator.alloc(TileType, 1);
+    world.tiles[0].ptr[0] = TileType.GROUD;
+    defer std.testing.allocator.free(world.tiles[0]);
 
     try std.testing.expect(world.tiles[0][0] == .GROUD);
 }
