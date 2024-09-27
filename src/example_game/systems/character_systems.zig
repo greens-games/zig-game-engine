@@ -34,3 +34,5 @@ pub fn updateTargetPos(characters: Arraylist(Character), tile_event_consumer: *T
         }
     }
 }
+
+pub fn moveUnit() void {}
