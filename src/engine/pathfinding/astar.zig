@@ -24,6 +24,7 @@ const Node = struct {
 
 ///AStar pathfinding to find the close to most optimal path
 pub fn aStar(start: Vector2, goal: Vector2, tiles: [][]TileType) ArrayList(Vector2) {
+    //for (tiles[0..]) |row| { for (row[0..]) |tile| { std.debug.print("{?}\n", .{tile}); } }
     var curr_pos: Vector2 = undefined;
     _ = &curr_pos;
 
@@ -117,6 +118,7 @@ fn validTile(curr_pos: Vector2, next_pos: Vector2, movement: Vector2, tiles: [][
     }
 
     //Check for non-walkable terrain
+    //std.debug.print("Pos: ({?}, {?})\n", .{ next_pos.y, next_pos.x }); std.debug.print("Type: {?}\n", .{tiles[@intCast(next_pos.y)][@intCast(next_pos.x)]});
     if (tiles[@intCast(next_pos.y)][@intCast(next_pos.x)] == TileType.RESOURCE) {
         return false;
     }

@@ -1,5 +1,6 @@
 const std = @import("std");
 const ArrayList = std.ArrayList;
+const MultiArrayList = std.MultiArrayList;
 const allocator = std.heap.page_allocator;
 const Sprites = @import("../../example_game/components/sprite.zig");
 const Characters = @import("../../example_game/components/character.zig");
@@ -14,20 +15,24 @@ const Constants = @import("../core/constants.zig");
 pub const World = struct {
     sprites: ArrayList(Sprites.GeometricSprite) = ArrayList(Sprites.GeometricSprite).init(allocator),
     characters: ArrayList(Characters.Character) = ArrayList(Characters.Character).init(allocator),
+    characters_multi: MultiArrayList(Characters.Character) = .{},
     al_tiles: ArrayList(Tile) = ArrayList(Tile).init(allocator),
-    tiles: [100][]TileType = undefined,
+    tiles: [10][]TileType = undefined,
 
     pub fn spawn_character(self: *World, character: Characters.Character) void {
 
         //std.debug.print("Spawning character with colour: {?}\n", .{character.color});
         self.characters.append(character) catch @panic("Failed to add character");
-        std.debug.print("Spawning character with colour after adding: {?}\n", .{self.characters.items[0].color});
+        self.characters_multi.append(allocator, character) catch @panic("Failed to add to multi chars");
     }
 
     pub fn cleanUp(self: *World) void {
         self.characters.deinit();
         self.sprites.deinit();
-        self.tiles.deinit();
+        for (self.tiles[0..]) |tile_slice| {
+            allocator.free(tile_slice);
+        }
+        std.debug.print("DONE CLEANING UP THE WORLD!!!", .{});
     }
 };
 

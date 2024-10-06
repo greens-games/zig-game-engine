@@ -119,7 +119,7 @@ pub const Game = struct {
                 TileEventSystem.update();
                 CharacterSystems.detectHover(world.characters);
                 //CharacterSystems.moveCharacter(world.characters);
-                CharacterSystems.updateTargetPos(world.characters, &tile_event_consumer);
+                CharacterSystems.updateTargetPos(world.characters_multi, &tile_event_consumer, &world);
             }
             //run rendering
             {
@@ -132,8 +132,8 @@ pub const Game = struct {
     }
 
     fn raylibCleanUp(self: *Game) void {
-        _ = self;
         rl.closeWindow();
+        self.world.cleanUp();
     }
     fn openGLSetup(self: *Game) void {
         const w_width: u32 = 640;

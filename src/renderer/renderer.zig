@@ -26,6 +26,7 @@ pub const Renderer = struct {
     }
 };
 
+//TODO: This whole renderer will need a rewrite to be more generic
 pub const RaylibRenderer = struct {
     //Squares draw origin in top left
     pub fn drawTeam(world: *World) void {
@@ -35,9 +36,9 @@ pub const RaylibRenderer = struct {
     }
 
     pub fn drawTargetPos(world: World) void {
-        for (world.characters.items) |character| {
-            if (character.target_pos.x >= 0 and character.target_pos.y >= 0) {
-                rl.drawRectangle(character.target_pos.x, character.target_pos.y, Constants.CELL_W, Constants.CELL_H, Color.green);
+        for (world.characters_multi.slice().items(.target_pos)) |target| {
+            if (target.x >= 0 and target.y >= 0) {
+                rl.drawRectangle(target.x, target.y, Constants.CELL_W, Constants.CELL_H, Color.green);
             }
         }
     }

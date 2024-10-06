@@ -28,10 +28,14 @@ pub fn spawnTeam(world: *World) void {
 //TODO: Improve to spawn tiles from a file to create  a map also remove raylib stuff
 pub fn spawnTiles(world: *World) void {
     var r: i32 = 0;
-    while (r <= rl.getScreenHeight()) {
+    //while (r <= rl.getScreenHeight()) {
+    while (r <= 480) {
         var c: i32 = 0;
-        while (c <= rl.getScreenWidth()) {
+        //while (c <= rl.getScreenWidth()) {
+        while (c <= 640) {
             const tile_rc = GridUtils.worldToGridCoords(c, r);
+            //TODO: Move this elsewhere later
+            world.tiles[@intCast(tile_rc.y)] = allocator.alloc(TileType, 10) catch @panic("Failed to allocate memory for tiles");
             world.tiles[@intCast(tile_rc.y)][@intCast(tile_rc.x)] = TileType.GROUD;
             c += Constants.CELL_W;
         }
@@ -39,4 +43,17 @@ pub fn spawnTiles(world: *World) void {
     }
 }
 
-test "move units" {}
+test "spawning tiles" {
+    var world: World = .{};
+    var r: usize = 0;
+    var c: usize = 0;
+    spawnTiles(&world);
+    for (world.tiles[0..]) |row| {
+        for (row[0..]) |tile| {
+            std.debug.print("POS: ({?}, {?})\n", .{ c, r });
+            std.debug.print("TILE: {?}\n", .{tile});
+            c += 1;
+        }
+        r += 1;
+    }
+}
