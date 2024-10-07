@@ -29,31 +29,33 @@ pub fn spawnTeam(world: *World) void {
 pub fn spawnTiles(world: *World) void {
     var r: i32 = 0;
     //while (r <= rl.getScreenHeight()) {
-    while (r <= 480) {
+    while (r <= 10) {
         var c: i32 = 0;
         //while (c <= rl.getScreenWidth()) {
-        while (c <= 640) {
+        while (c <= 10) {
             const tile_rc = GridUtils.worldToGridCoords(c, r);
             //TODO: Move this elsewhere later
             world.tiles[@intCast(tile_rc.y)] = allocator.alloc(TileType, 10) catch @panic("Failed to allocate memory for tiles");
             world.tiles[@intCast(tile_rc.y)][@intCast(tile_rc.x)] = TileType.GROUD;
-            c += Constants.CELL_W;
+            c += 1;
         }
-        r += Constants.CELL_H;
+        r += 1;
     }
 }
 
 test "spawning tiles" {
     var world: World = .{};
-    var r: usize = 0;
-    var c: usize = 0;
+    //var r: usize = 0;
     spawnTiles(&world);
-    for (world.tiles[0..]) |row| {
-        for (row[0..]) |tile| {
-            std.debug.print("POS: ({?}, {?})\n", .{ c, r });
-            std.debug.print("TILE: {?}\n", .{tile});
-            c += 1;
+
+    for (world.tiles, 0..) |value, i| {
+        std.debug.print("POS: ({?}, )\n", .{i});
+        //std.debug.print("TILE: {?}\n", .{value[i]});
+        for (value, 0..) |v, j| {
+            std.debug.print("POS: ({?}, )\n", .{j});
+            _ = v;
         }
-        r += 1;
     }
+
+    //for (world.tiles[0..]) |row| { var c: usize = 0; for (row[0..]) |tile| { std.debug.print("POS: ({?}, {?})\n", .{ c, r }); std.debug.print("TILE: {?}\n", .{tile}); c += 1; } std.debug.print("Next row\n", .{}); r += 1; }
 }
