@@ -28,15 +28,15 @@ pub fn spawnTeam(world: *World) void {
 //TODO: Improve to spawn tiles from a file to create  a map also remove raylib stuff
 pub fn spawnTiles(world: *World) void {
     var r: i32 = 0;
-    //while (r <= rl.getScreenHeight()) {
-    while (r <= 10) {
+    while (r < 10) {
         var c: i32 = 0;
-        //while (c <= rl.getScreenWidth()) {
-        while (c <= 10) {
-            const tile_rc = GridUtils.worldToGridCoords(c, r);
+        while (c < 10) {
+            //const tile_rc = GridUtils.worldToGridCoords(c, r);
+            //std.debug.print("{?}\n", .{tile_rc});
             //TODO: Move this elsewhere later
-            world.tiles[@intCast(tile_rc.y)] = allocator.alloc(TileType, 10) catch @panic("Failed to allocate memory for tiles");
-            world.tiles[@intCast(tile_rc.y)][@intCast(tile_rc.x)] = TileType.GROUD;
+            world.tiles[@intCast(r)] = allocator.alloc(TileType, 10) catch @panic("Failed to allocate memory for tiles");
+            world.tiles[@intCast(r)][@intCast(c)] = TileType.GROUD;
+            std.debug.print("POS: ({?}, {?}); VALUE: {?}\n", .{ r, c, world.tiles[@intCast(r)][@intCast(c)] });
             c += 1;
         }
         r += 1;
@@ -49,11 +49,10 @@ test "spawning tiles" {
     spawnTiles(&world);
 
     for (world.tiles, 0..) |value, i| {
-        std.debug.print("POS: ({?}, )\n", .{i});
         //std.debug.print("TILE: {?}\n", .{value[i]});
         for (value, 0..) |v, j| {
-            std.debug.print("POS: ({?}, )\n", .{j});
-            _ = v;
+            std.debug.print("POS: ({?}, {?})\n", .{ i, j });
+            std.debug.print("Value: ({?}, )\n", .{v});
         }
     }
 
