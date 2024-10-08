@@ -27,17 +27,16 @@ pub fn moveCharacter(characters: Arraylist(Character)) void {
     }
 }
 
-pub fn updateTargetPos(characters: MultiArraylist(Character), tile_event_consumer: *TileEventConsumer, world: *World) void {
+pub fn updateTargetPos(characters: MultiArraylist(Character), tile_event_consumer: *TileEventConsumer) void {
     if (tile_event_consumer.events.items.len > 0) {
         //do something with the event
         const event: TileClickEvent = tile_event_consumer.events.orderedRemove(0);
         const char_slice = characters.slice();
-        for (char_slice.items(.target_pos), char_slice.items(.position), char_slice.items(.move_path)) |*target, pos, *path| {
-            const new_pos: Vector2 = GridUtils.gridToWorldCoords(event.col, event.row);
+        for (char_slice.items(.target_pos), char_slice.items(.position), char_slice.items(.path)) |*target, pos, *path| {
+            const new_pos: Vector2 = .{ .x = event.col, .y = event.row };
             if (!new_pos.eql(target.*)) {
                 target.* = new_pos;
-                path.*.path = AStar.aStar(pos, target.*, world.tiles[0..]);
-                std.debug.print("{?}", .{path.*});
+                path.* = AStar.aStar(pos, target.*);
             }
         }
     }
@@ -47,8 +46,11 @@ pub fn moveUnit(characters: MultiArraylist(Character)) void {
 
     //get the next location in move_path, set player's position to that location
     const char_slice = characters.slice();
-    for (char_slice.items(.move_path), char_slice.items(.target_pos)) |move, target| {
-        _ = move;
-        _ = target;
+    for (char_slice.items(.path), char_slice.items(.position)) |*move, *curr_position| {
+        if (move.*.items.len > 0) {
+            std.debug.print("Curr POS: {?}\n", .{curr_position});
+            const new_pos: Vector2 = move.*.pop();
+            curr_position.* = new_pos;
+        }
     }
 }

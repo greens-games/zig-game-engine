@@ -4,6 +4,7 @@ const Vector2 = @import("../core/types.zig").Vector2;
 //TODO: Remove when we have better solution for not using game specific logic here
 const TileType = @import("../../example_game/components/tile.zig").TileType;
 const GridUtils = @import("../../example_game/grid/grid_utils.zig");
+const World = @import("../core/world.zig").World;
 
 const Successor = struct {
     parent_id: i32 = 0,
@@ -23,11 +24,7 @@ const Node = struct {
 };
 
 ///AStar pathfinding to find the close to most optimal path
-pub fn aStar(start: Vector2, goal: Vector2, tiles: [][]TileType) ArrayList(Vector2) {
-    //for (tiles[0..]) |row| { for (row[0..]) |tile| { std.debug.print("{?}\n", .{tile}); } }
-    var curr_pos: Vector2 = undefined;
-    _ = &curr_pos;
-
+pub fn aStar(start: Vector2, goal: Vector2) ArrayList(Vector2) {
     var open_list: ArrayList(Node) = ArrayList(Node).init(std.heap.page_allocator);
     defer open_list.deinit();
     var close_list: ArrayList(Node) = ArrayList(Node).init(std.heap.page_allocator);
@@ -54,7 +51,7 @@ pub fn aStar(start: Vector2, goal: Vector2, tiles: [][]TileType) ArrayList(Vecto
 
         //getAllNeighbours (which is get all nodes that are next to this node
         //If a neighbour is in the closed list skip it (we visited it already)
-        getAllNeighbours(&q, &successors, tiles);
+        getAllNeighbours(&q, &successors, World.tiles[0..]);
 
         successor_loop: for (successors.items) |*successor| {
             //check if successor pos is in closed list
@@ -87,7 +84,7 @@ pub fn aStar(start: Vector2, goal: Vector2, tiles: [][]TileType) ArrayList(Vecto
 
         index += 1;
     }
-    return reverseList(backTrack(close_list));
+    return backTrack(close_list);
 }
 
 fn getAllNeighbours(parent: *Node, neighbour_list: *ArrayList(Node), tiles: [][]TileType) void {
@@ -106,7 +103,6 @@ fn getAllNeighbours(parent: *Node, neighbour_list: *ArrayList(Node), tiles: [][]
         if (validTile(parent.pos, new_pos, move, tiles[0..])) {
             const node: Node = .{ .pos = new_pos };
             addToList(neighbour_list, node);
-            //std.debug.print("First in Neighbour list {?}; current parent {?}; size of neightbour list {?}; current node: {?}\n", .{ neighbour_list.items[0], parent, neighbour_list.items.len, node });
         }
     }
 }
@@ -180,10 +176,7 @@ fn backTrack(list: ArrayList(Node)) ArrayList(Vector2) {
     var i: usize = 100;
     _ = &i;
 
-    //for (list.items) |item| { std.debug.print("Node: {?} Parent: {?}\n", .{ item.pos, item.parent_index }); }
     while (curr_node.parent_index >= 0) {
-        std.debug.print("POS: {?} \n", .{curr_node.pos});
-        //std.debug.print("POS: {?} \n", .{curr_node.parent_index});
         ret_list.append(curr_node.pos) catch @panic("Failed to add character to list of current nodes");
         curr_node = list.items[@intCast(curr_node.parent_index)];
     }
@@ -197,7 +190,6 @@ fn reverseList(list: ArrayList(Vector2)) ArrayList(Vector2) {
 
     while (index > 0) {
         new_list.append(list.items[index]) catch @panic("Failed reversing list");
-        std.debug.print("POS REVERSED: {?} \n", .{list.items[index]});
         index -= 1;
     }
 

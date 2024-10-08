@@ -8,7 +8,7 @@ const World = @import("../engine/core/world.zig").World;
 const Color = @import("raylib").Color;
 const rl = @import("raylib");
 const Constants = @import("../engine/core/constants.zig");
-
+const GridUtils = @import("../example_game/grid/grid_utils.zig");
 ///OpenGL renderer
 pub const Renderer = struct {
     pub fn draw(vao: VertexArray, ibo: IndexBuffer, shader: c_uint) void {
@@ -30,15 +30,17 @@ pub const Renderer = struct {
 pub const RaylibRenderer = struct {
     //Squares draw origin in top left
     pub fn drawTeam(world: *World) void {
-        for (world.characters.items) |character| {
-            rl.drawRectangle(character.position.x, character.position.y, Constants.CELL_W, Constants.CELL_H, character.color);
+        for (world.characters_multi.slice().items(.position)) |pos| {
+            const toWorld = GridUtils.gridToWorldCoords(pos.x, pos.y);
+            rl.drawRectangle(toWorld.x, toWorld.y, Constants.CELL_W, Constants.CELL_H, Color.blue);
         }
     }
 
     pub fn drawTargetPos(world: World) void {
         for (world.characters_multi.slice().items(.target_pos)) |target| {
             if (target.x >= 0 and target.y >= 0) {
-                rl.drawRectangle(target.x, target.y, Constants.CELL_W, Constants.CELL_H, Color.green);
+                const toWorld = GridUtils.gridToWorldCoords(target.x, target.y);
+                rl.drawRectangle(toWorld.x, toWorld.y, Constants.CELL_W, Constants.CELL_H, Color.green);
             }
         }
     }

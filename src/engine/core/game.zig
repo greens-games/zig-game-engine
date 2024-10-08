@@ -106,26 +106,27 @@ pub const Game = struct {
         {
             //Init Map
             InitSystem.spawnTeam(&world);
-            InitSystem.spawnTiles(&world);
+            InitSystem.spawnTiles();
         }
 
         // Main game loop
+        // I think we want to run some systems slower (i.e moving)
         while (!rl.windowShouldClose()) {
             rl.beginDrawing();
             defer rl.endDrawing();
             //run systems
             {
-                InputSystem.handleMouseInput(world, &tile_event_producer);
+                InputSystem.handleMouseInput(&tile_event_producer);
                 TileEventSystem.update();
                 CharacterSystems.detectHover(world.characters);
                 //CharacterSystems.moveCharacter(world.characters);
-                CharacterSystems.updateTargetPos(world.characters_multi, &tile_event_consumer, &world);
+                CharacterSystems.updateTargetPos(world.characters_multi, &tile_event_consumer);
+                CharacterSystems.moveUnit(world.characters_multi);
             }
             //run rendering
             {
                 Renderer.drawGrid();
                 Renderer.drawTeam(&world);
-                Renderer.drawTargetPos(world);
             }
             rl.clearBackground(rl.Color.white);
         }

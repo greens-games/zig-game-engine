@@ -17,7 +17,9 @@ pub const World = struct {
     characters: ArrayList(Characters.Character) = ArrayList(Characters.Character).init(allocator),
     characters_multi: MultiArrayList(Characters.Character) = .{},
     al_tiles: ArrayList(Tile) = ArrayList(Tile).init(allocator),
-    tiles: [10][]TileType = undefined,
+
+    //Static Vars: Are they good or are they bad who knows? Answer: Smarter people than me
+    pub var tiles: [100][]TileType = undefined;
 
     pub fn spawn_character(self: *World, character: Characters.Character) void {
 
@@ -29,7 +31,7 @@ pub const World = struct {
     pub fn cleanUp(self: *World) void {
         self.characters.deinit();
         self.sprites.deinit();
-        for (self.tiles[0..]) |tile_slice| {
+        for (tiles[0..]) |tile_slice| {
             allocator.free(tile_slice);
         }
         std.debug.print("DONE CLEANING UP THE WORLD!!!", .{});
@@ -37,11 +39,9 @@ pub const World = struct {
 };
 
 test "test Tiles" {
-    var world: World = .{};
+    World.tiles[0] = try std.testing.allocator.alloc(TileType, 1);
+    World.tiles[0].ptr[0] = TileType.GROUD;
+    defer std.testing.allocator.free(World.tiles[0]);
 
-    world.tiles[0] = try std.testing.allocator.alloc(TileType, 1);
-    world.tiles[0].ptr[0] = TileType.GROUD;
-    defer std.testing.allocator.free(world.tiles[0]);
-
-    try std.testing.expect(world.tiles[0][0] == .GROUD);
+    try std.testing.expect(World.tiles[0][0] == .GROUD);
 }
