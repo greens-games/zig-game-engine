@@ -59,13 +59,6 @@ pub fn updateTargetPos(characters: MultiArraylist(Character), tile_event_consume
     }
 }
 
-fn findClosestTile() Vector2 {
-    return .{
-        .x = 0,
-        .y = 0,
-    };
-}
-
 pub fn moveUnit(characters: MultiArraylist(Character)) void {
 
     //get the next location in move_path, set player's position to that location
@@ -81,4 +74,56 @@ pub fn moveUnit(characters: MultiArraylist(Character)) void {
 pub fn resourceInteraction(characters: MultiArraylist(Character)) void {
     //happens when player clicks on a resource
     _ = characters;
+}
+
+//UITLS
+//
+fn findClosestTile(goal: Vector2) Vector2 {
+    _ = goal;
+    // get the tile in World.tiles
+    return .{
+        .x = 0,
+        .y = 0,
+    };
+}
+
+fn getAllNeighbours(goal: Vector2) void {
+    const move1: Vector2 = .{ .x = 1, .y = 0 };
+    const move2: Vector2 = .{ .x = 1, .y = 1 };
+    const move3: Vector2 = .{ .x = 0, .y = 1 };
+    const move4: Vector2 = .{ .x = -1, .y = 1 };
+    const move5: Vector2 = .{ .x = -1, .y = 0 };
+    const move6: Vector2 = .{ .x = -1, .y = -1 };
+    const move7: Vector2 = .{ .x = 0, .y = -1 };
+    const move8: Vector2 = .{ .x = 1, .y = -1 };
+    const moves: [8]Vector2 = .{ move1, move2, move3, move4, move5, move6, move7, move8 };
+
+    for (moves) |move| {
+        const new_pos: Vector2 = Vector2.add(goal, move);
+        if (validTile(goal, new_pos, move, World.tiles[0..])) {
+            //If it is a valid tile we want to see if it is the "closest" to our chracter
+        }
+    }
+}
+
+fn validTile(curr_pos: Vector2, next_pos: Vector2, movement: Vector2, tiles: [][]TileType) bool {
+    //Out of bounds check
+    if ((next_pos.y > tiles.len - 1 or next_pos.x > tiles[0].len - 1) or (next_pos.x < 0 or next_pos.y < 0)) {
+        return false;
+    }
+
+    //Check for non-walkable terrain
+    //std.debug.print("Pos: ({?}, {?})\n", .{ next_pos.y, next_pos.x }); std.debug.print("Type: {?}\n", .{tiles[@intCast(next_pos.y)][@intCast(next_pos.x)]});
+    if (tiles[@intCast(next_pos.y)][@intCast(next_pos.x)] == TileType.RESOURCE) {
+        return false;
+    }
+
+    //Diagonal movement check for adjacent terrain
+    if (movement.y != 0 and movement.x != 0) {
+        if (tiles[@intCast(curr_pos.y + movement.y)][@intCast(curr_pos.x)] == TileType.RESOURCE and tiles[@intCast(curr_pos.y)][@intCast(curr_pos.x + movement.x)] == TileType.RESOURCE) {
+            return false;
+        }
+    }
+
+    return true;
 }
