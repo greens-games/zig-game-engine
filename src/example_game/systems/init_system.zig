@@ -20,6 +20,7 @@ pub fn spawnTeam(world: *World) void {
         .class_id = 0,
         //We can set the colour based on the class_id as well
         .color = rl.Color.blue,
+        .curr_state = .IDLE,
     };
     world.spawn_character(character);
 }
@@ -37,6 +38,11 @@ pub fn spawnTiles() void {
         }
         r += 1;
     }
+    World.tiles[5][5] = TileType.RESOURCE;
+    World.tiles[0][1] = TileType.RESOURCE;
+    World.tiles[15][5] = TileType.RESOURCE;
+    World.tiles[0][2] = TileType.RESOURCE;
+    World.tiles[9][4] = TileType.RESOURCE;
 }
 
 test "spawning tiles" {

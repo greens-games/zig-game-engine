@@ -123,7 +123,11 @@ pub const Game = struct {
                 CharacterSystems.updateTargetPos(world.characters_multi, &tile_event_consumer);
                 CharacterSystems.moveUnit(world.characters_multi);
             }
-            //run rendering
+            //render layer 1
+            {
+                Renderer.drawMap();
+            }
+            //render layer 2
             {
                 Renderer.drawGrid();
                 Renderer.drawTeam(&world);

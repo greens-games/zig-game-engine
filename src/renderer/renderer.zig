@@ -57,6 +57,21 @@ pub const RaylibRenderer = struct {
         }
     }
 
+    //TODO: Something is backwards here or in spawnTiles in init_system
+    pub fn drawMap() void {
+        for (0..15) |r| {
+            for (0..20) |c| {
+                const color: Color = switch (World.tiles[r][c]) {
+                    .RESOURCE => Color.gold,
+                    .ENEMY => Color.red,
+                    else => Color.dark_green,
+                };
+                const toWorld = GridUtils.gridToWorldCoords(@intCast(c), @intCast(r));
+                drawSquare(toWorld.x, toWorld.y, color);
+            }
+        }
+    }
+
     pub fn drawSquare(x: i32, y: i32, color: rl.Color) void {
         rl.drawRectangle(x, y, Constants.CELL_W, Constants.CELL_H, color);
     }

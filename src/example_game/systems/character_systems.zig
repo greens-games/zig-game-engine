@@ -9,6 +9,7 @@ const GridUtils = @import("../../example_game/grid/grid_utils.zig");
 const TileEventConsumer = @import("../events/tile_events.zig").TileClickEventConsumer;
 const TileClickEvent = @import("../components/tile_events.zig").TileClickEvent;
 const World = @import("../../engine/core/world.zig").World;
+const TileType = @import("../components/tile.zig").TileType;
 
 //TODO: Remove all instances of raylib from gameplay systems (we can use raylib stuff in input and render systems)
 pub fn detectHover(characters: Arraylist(Character)) void {
@@ -32,14 +33,37 @@ pub fn updateTargetPos(characters: MultiArraylist(Character), tile_event_consume
         //do something with the event
         const event: TileClickEvent = tile_event_consumer.events.orderedRemove(0);
         const char_slice = characters.slice();
-        for (char_slice.items(.target_pos), char_slice.items(.position), char_slice.items(.path)) |*target, pos, *path| {
+        for (char_slice.items(.target_pos), char_slice.items(.position), char_slice.items(.path), char_slice.items(.curr_state)) |*target, pos, *path, *state| {
             const new_pos: Vector2 = .{ .x = event.col, .y = event.row };
             if (!new_pos.eql(target.*)) {
-                target.* = new_pos;
-                path.* = AStar.aStar(pos, target.*);
+                //Check what the tile is we are moving to
+                const selected_tile: TileType = World.tiles[@intCast(new_pos.y)][@intCast(new_pos.x)];
+                switch (selected_tile) {
+                    .RESOURCE => state.* = .HARVESTING,
+                    .ENEMY => state.* = .ATTACKING,
+                    else => state.* = .IDLE,
+                }
+                std.debug.print("SELECTED TILE {?} AT POS: ({?}, {?})\n", .{ selected_tile, new_pos.x, new_pos.y });
+                if (selected_tile != .RESOURCE) {
+                    target.* = new_pos;
+                    path.* = AStar.aStar(pos, target.*);
+                } else {
+                    //find closest non-resource tile
+
+                    //astar to this tile
+                    //set state to Harvesting
+                    state.* = .HARVESTING;
+                }
             }
         }
     }
+}
+
+fn findClosestTile() Vector2 {
+    return .{
+        .x = 0,
+        .y = 0,
+    };
 }
 
 pub fn moveUnit(characters: MultiArraylist(Character)) void {
@@ -48,9 +72,13 @@ pub fn moveUnit(characters: MultiArraylist(Character)) void {
     const char_slice = characters.slice();
     for (char_slice.items(.path), char_slice.items(.position)) |*move, *curr_position| {
         if (move.*.items.len > 0) {
-            std.debug.print("Curr POS: {?}\n", .{curr_position});
             const new_pos: Vector2 = move.*.pop();
             curr_position.* = new_pos;
         }
     }
+}
+
+pub fn resourceInteraction(characters: MultiArraylist(Character)) void {
+    //happens when player clicks on a resource
+    _ = characters;
 }
