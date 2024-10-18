@@ -33,7 +33,7 @@ pub fn updateTargetPos(characters: MultiArraylist(Character), tile_event_consume
         //do something with the event
         const event: TileClickEvent = tile_event_consumer.events.orderedRemove(0);
         const char_slice = characters.slice();
-        for (char_slice.items(.target_pos), char_slice.items(.position), char_slice.items(.path), char_slice.items(.curr_state)) |*target, pos, *path, *state| {
+        for (char_slice.items(.target_pos), char_slice.items(.position), char_slice.items(.path), char_slice.items(.queued_state)) |*target, pos, *path, *state| {
             const new_pos: Vector2 = .{ .x = event.col, .y = event.row };
             if (!new_pos.eql(target.*)) {
                 //Check what the tile is we are moving to
@@ -52,6 +52,7 @@ pub fn updateTargetPos(characters: MultiArraylist(Character), tile_event_consume
 
                     //astar to this tile
                     //set state to Harvesting
+                    //TODO: We will put the new ActionState into the a queue and pop it off once we reach the final spot, if we our goal state hasn't changed we will grab it from the queue for the system that needs it
                     state.* = .HARVESTING;
                 }
             }
@@ -63,10 +64,15 @@ pub fn moveUnit(characters: MultiArraylist(Character)) void {
 
     //get the next location in move_path, set player's position to that location
     const char_slice = characters.slice();
-    for (char_slice.items(.path), char_slice.items(.position)) |*move, *curr_position| {
+    for (char_slice.items(.path), char_slice.items(.position), char_slice.items(.queued_state), char_slice.items(.curr_state)) |*move, *curr_position, q_state, *c_state| {
         if (move.*.items.len > 0) {
             const new_pos: Vector2 = move.*.pop();
             curr_position.* = new_pos;
+            if (move.*.items.len == 0) {
+                //Here we will set the c_state to q_state
+                c_state.* = q_state;
+                q_state = .IDLE;
+            }
         }
     }
 }
@@ -77,9 +83,16 @@ pub fn resourceInteraction(characters: MultiArraylist(Character)) void {
 }
 
 //UITLS
-//
-fn findClosestTile(goal: Vector2) Vector2 {
+//TODO: These is duplicated from AStar so we can find a better place or way to do it
+
+///We'll use some arbitrary heuristic to judge the "Closest Valid Tile" this will be based on our position relative to the goal
+fn findClosestTile(goal: Vector2, curr_pos: Vector2) Vector2 {
+    _ = curr_pos; // autofix
     _ = goal;
+    //Heuristic
+    //For each valid tile
+    //Check curr_pos - goal
+    //figure out which takes the least moves
     // get the tile in World.tiles
     return .{
         .x = 0,
@@ -89,19 +102,19 @@ fn findClosestTile(goal: Vector2) Vector2 {
 
 fn getAllNeighbours(goal: Vector2) void {
     const move1: Vector2 = .{ .x = 1, .y = 0 };
-    const move2: Vector2 = .{ .x = 1, .y = 1 };
+    //    const move2: Vector2 = .{ .x = 1, .y = 1 };
     const move3: Vector2 = .{ .x = 0, .y = 1 };
-    const move4: Vector2 = .{ .x = -1, .y = 1 };
+    //    const move4: Vector2 = .{ .x = -1, .y = 1 };
     const move5: Vector2 = .{ .x = -1, .y = 0 };
-    const move6: Vector2 = .{ .x = -1, .y = -1 };
+    //    const move6: Vector2 = .{ .x = -1, .y = -1 };
     const move7: Vector2 = .{ .x = 0, .y = -1 };
-    const move8: Vector2 = .{ .x = 1, .y = -1 };
-    const moves: [8]Vector2 = .{ move1, move2, move3, move4, move5, move6, move7, move8 };
-
+    //    const move8: Vector2 = .{ .x = 1, .y = -1 };
+    const moves: [8]Vector2 = .{ move1, move3, move5, move7 };
     for (moves) |move| {
         const new_pos: Vector2 = Vector2.add(goal, move);
         if (validTile(goal, new_pos, move, World.tiles[0..])) {
             //If it is a valid tile we want to see if it is the "closest" to our chracter
+
         }
     }
 }
@@ -126,4 +139,8 @@ fn validTile(curr_pos: Vector2, next_pos: Vector2, movement: Vector2, tiles: [][
     }
 
     return true;
+}
+
+test "finding closest tile to resource" {
+    _ = findClosestTile(.{ .x = 2, .y = 3 }, .{ .x = 1, .y = 1 });
 }

@@ -20,7 +20,6 @@ pub fn spawnTeam(world: *World) void {
         .class_id = 0,
         //We can set the colour based on the class_id as well
         .color = rl.Color.blue,
-        .curr_state = .IDLE,
     };
     world.spawn_character(character);
 }
