@@ -13,6 +13,7 @@ const System = @import("engine/ecs/system.zig");
 const BFSearch = @import("engine/pathfinding/breadth_first.zig");
 const AStar = @import("engine/pathfinding/astar.zig");
 const InitSystem = @import("example_game/systems/init_system.zig");
+const CharacterSystem = @import("example_game/systems/character_systems.zig");
 
 //Game Specific
 const TileEvents = @import("example_game/events/tile_events.zig");
@@ -33,7 +34,8 @@ test "all" {
     //    std.testing.refAllDecls(Entity);
     //    std.testing.refAllDecls(Events);
     //std.testing.refAllDecls(World);
-    std.testing.refAllDecls(InitSystem);
+    //    std.testing.refAllDecls(InitSystem);
+    std.testing.refAllDecls(CharacterSystem);
     //    std.testing.refAllDecls(TileEvents);
     //    std.testing.refAllDecls(BFSearch);
     //std.testing.refAllDecls(AStar);

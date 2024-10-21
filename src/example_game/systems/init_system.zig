@@ -12,6 +12,7 @@ const Tile = @import("../components/tile.zig").Tile;
 const TileType = @import("../components/tile.zig").TileType;
 const GridUtils = @import("../grid/grid_utils.zig");
 const Constants = @import("../utils/constants.zig");
+const Tools = @import("../components/tool.zig");
 
 pub fn spawnTeam(world: *World) void {
     const character: Characters.Character = .{
@@ -20,6 +21,7 @@ pub fn spawnTeam(world: *World) void {
         .class_id = 0,
         //We can set the colour based on the class_id as well
         .color = rl.Color.blue,
+        .forestry_tool = Tools.ForestryTool.init(5.0),
     };
     world.spawn_character(character);
 }
@@ -39,7 +41,6 @@ pub fn spawnTiles() void {
     }
     World.tiles[5][5] = TileType.RESOURCE;
     World.tiles[0][1] = TileType.RESOURCE;
-    World.tiles[15][5] = TileType.RESOURCE;
     World.tiles[0][2] = TileType.RESOURCE;
     World.tiles[9][4] = TileType.RESOURCE;
 }

@@ -13,6 +13,7 @@ const setup = @import("../../init/setup.zig");
 const Events = @import("../../event/event.zig");
 const World = @import("world.zig").World;
 const Renderer = @import("../../renderer/renderer.zig").RaylibRenderer;
+const Timer = @import("../core/timer.zig").Timer;
 
 //FROM EXAMPLE GAME
 const InitSystem = @import("../../example_game/systems/init_system.zig");
@@ -102,26 +103,39 @@ pub const Game = struct {
         var tile_event_consumer: TileEventSystem.TileClickEventConsumer = .{};
         tile_event_producer.init() catch @panic("Failed to add to producer");
         tile_event_consumer.init() catch @panic("Failed to add to consumer");
+        var last_frame_time: f64 = 0.0;
         //Run setup systems
         {
             //Init Map
             InitSystem.spawnTeam(&world);
             InitSystem.spawnTiles();
         }
-
-        // Main game loop
+        const timer: Timer = Timer.init(5.0, true);
         // I think we want to run some systems slower (i.e moving)
         while (!rl.windowShouldClose()) {
+            const curr_time: f64 = rl.getTime();
+            const delta_time = curr_time - last_frame_time;
+            _ = delta_time; // autofix
+            last_frame_time = curr_time;
+            World.game_time = last_frame_time;
             rl.beginDrawing();
             defer rl.endDrawing();
+
+            //TIMER TESTING
+            {
+                if (timer.isLooping and !timer.isRunning) {
+                    //                    timer.start();
+                }
+            }
             //run systems
+            //TODO: This will be controlled by game ticks
             {
                 InputSystem.handleMouseInput(&tile_event_producer);
                 TileEventSystem.update();
                 CharacterSystems.detectHover(world.characters);
-                //CharacterSystems.moveCharacter(world.characters);
                 CharacterSystems.updateTargetPos(world.characters_multi, &tile_event_consumer);
                 CharacterSystems.moveUnit(world.characters_multi);
+                CharacterSystems.resourceInteraction(world.characters_multi);
             }
             //render layer 1
             {
@@ -134,6 +148,8 @@ pub const Game = struct {
             }
             rl.clearBackground(rl.Color.white);
         }
+
+        std.debug.print("last_frame_time: {d}; \n", .{last_frame_time});
     }
 
     fn raylibCleanUp(self: *Game) void {

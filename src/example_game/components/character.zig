@@ -4,6 +4,8 @@ const rl = @import("raylib");
 const Vector2 = @import("../../engine/core/types.zig").Vector2;
 const Arraylist = std.ArrayList;
 const ActionState = @import("./states.zig").ActionState;
+const Tools = @import("tool.zig");
+const Inventory = @import("inventory.zig").Inventory;
 //TODO: This entity is very large I want to reduce it where possible
 pub const Character = struct {
     //Entity ID
@@ -21,4 +23,7 @@ pub const Character = struct {
     path: Arraylist(Vector2) = Arraylist(Vector2).init(std.heap.page_allocator),
     curr_state: ActionState = .IDLE,
     queued_state: ActionState = .IDLE, //This may end up being a linked list or an arraylist
+    //This could maybe be a separate list of entities
+    forestry_tool: Tools.ForestryTool,
+    inventory: Inventory = .{ .wood = 0 },
 };

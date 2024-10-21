@@ -283,7 +283,7 @@ test "AStar complex path" {
     tiles[3][3] = .RESOURCE;
     const start: Vector2 = .{ .x = 0, .y = 0 };
     const end: Vector2 = .{ .y = 4, .x = 4 };
-    _ = aStar(start, end, tiles[0..]);
+    _ = aStar(start, end);
 
     //for (new_list.items) |pos| { std.debug.print("POS REVERSED: {?} \n", .{pos}); }
 }

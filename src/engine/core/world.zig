@@ -10,6 +10,7 @@ const TileClickEvent = @import("../../example_game/components/tile_events.zig").
 const Color = @import("raylib").Color;
 const Vector2 = @import("types.zig").Vector2;
 const Constants = @import("../core/constants.zig");
+const GameConstants = @import("../../example_game/utils/constants.zig");
 
 /// Kepps track of the current world state
 pub const World = struct {
@@ -19,7 +20,8 @@ pub const World = struct {
     al_tiles: ArrayList(Tile) = ArrayList(Tile).init(allocator),
 
     //Static Vars: Are they good or are they bad who knows? Answer: Smarter people than me
-    pub var tiles: [100][]TileType = undefined;
+    pub var tiles: [GameConstants.GRID_H][]TileType = undefined;
+    pub var game_time: f64 = 0;
 
     pub fn spawn_character(self: *World, character: Characters.Character) void {
 
@@ -35,6 +37,23 @@ pub const World = struct {
             allocator.free(tile_slice);
         }
         std.debug.print("DONE CLEANING UP THE WORLD!!!", .{});
+    }
+
+    //DEBUGGING
+    pub fn printTiles() void {
+        for (tiles[0..]) |r| {
+            for (r[0..]) |c| {
+                var letter: u8 = 'G';
+                switch (c) {
+                    .GROUD => letter = 'G',
+                    .PLAYERCHARACTER => letter = 'P',
+                    .ENEMY => letter = 'E',
+                    .RESOURCE => letter = 'R',
+                }
+                std.debug.print("{c} ", .{letter});
+            }
+            std.debug.print("\n", .{});
+        }
     }
 };
 
