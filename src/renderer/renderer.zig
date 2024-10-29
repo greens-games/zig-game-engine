@@ -1,8 +1,6 @@
 const std = @import("std");
-const gl = @import("ziggl");
 const VertexArray = @import("vertex_array.zig").VertexArray;
 const IndexBuffer = @import("index_buffer.zig").IndexBuffer;
-const shader_loader = @import("../shaders/shader_loader.zig");
 
 const World = @import("../engine/core/world.zig").World;
 const Color = @import("raylib").Color;
@@ -10,21 +8,21 @@ const rl = @import("raylib");
 const Constants = @import("../engine/core/constants.zig");
 const GridUtils = @import("../example_game/grid/grid_utils.zig");
 ///OpenGL renderer
-pub const Renderer = struct {
-    pub fn draw(vao: VertexArray, ibo: IndexBuffer, shader: c_uint) void {
-        gl.UseProgram(shader);
-        //CREATE VERTEX ARRAY
-        vao.bind();
-        //CREATE INDEX BUFF
-        ibo.bind();
+//pub const Renderer = struct {
+//    pub fn draw(vao: VertexArray, ibo: IndexBuffer, shader: c_uint) void {
+//        gl.UseProgram(shader);
+//        //CREATE VERTEX ARRAY
+//        vao.bind();
+//        //CREATE INDEX BUFF
+//        ibo.bind();
+//
+//        gl.DrawElements(gl.TRIANGLES, ibo.count, gl.UNSIGNED_INT, ibo.buff_id);
+//    }
 
-        gl.DrawElements(gl.TRIANGLES, ibo.count, gl.UNSIGNED_INT, ibo.buff_id);
-    }
-
-    pub fn clear() void {
-        gl.Clear(gl.COLOR_BUFFER_BIT);
-    }
-};
+//    pub fn clear() void {
+//        gl.Clear(gl.COLOR_BUFFER_BIT);
+//    }
+//};
 
 //TODO: This whole renderer will need a rewrite to be more generic
 pub const RaylibRenderer = struct {

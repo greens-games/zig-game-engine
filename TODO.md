@@ -11,3 +11,11 @@
     + make different tools
 - Get RNG working for combat and gathering etc...
 - Procedural generation
+
+
+### Event System Revamp
+- Scalable
+- ABle to just define a struct of the information for the event
+- Able to register consumer and producer
+- Don't have the rewrite an entire event thing
+- Probably use anytype and anyopaque and use "interfaces"

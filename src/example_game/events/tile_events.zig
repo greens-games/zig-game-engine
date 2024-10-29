@@ -1,10 +1,6 @@
 //TODO: This whole system will probably get rewritten
 const std = @import("std");
 const ArrayList = std.ArrayList;
-const KeyButton = @import("mach-glfw").MouseButton;
-const Action = @import("mach-glfw").Action;
-const Mods = @import("mach-glfw").Mods;
-const Key = @import("mach-glfw").Key;
 const TileClickEvent = @import("../components/tile_events.zig").TileClickEvent;
 const TileType = @import("../../example_game/components/tile.zig").TileType;
 

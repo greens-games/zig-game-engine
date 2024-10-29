@@ -6,14 +6,13 @@ const std = @import("std");
 pub const Game = @import("engine/core/game.zig").Game;
 pub const World = @import("engine/core/world.zig");
 const Entity = @import("engine/ecs/entity.zig");
-const Events = @import("event/event.zig");
 const any_type = @import("for_fun/any_type.zig");
 const rl_render = @import("renderer/raylib_renderer.zig");
-const System = @import("engine/ecs/system.zig");
 const BFSearch = @import("engine/pathfinding/breadth_first.zig");
 const AStar = @import("engine/pathfinding/astar.zig");
 const InitSystem = @import("example_game/systems/init_system.zig");
 const CharacterSystem = @import("example_game/systems/character_systems.zig");
+const EventSystem = @import("engine/ecs/event_system.zig");
 
 //Game Specific
 const TileEvents = @import("example_game/events/tile_events.zig");
@@ -35,8 +34,9 @@ test "all" {
     //    std.testing.refAllDecls(Events);
     //std.testing.refAllDecls(World);
     //    std.testing.refAllDecls(InitSystem);
-    std.testing.refAllDecls(CharacterSystem);
+    //    std.testing.refAllDecls(CharacterSystem);
     //    std.testing.refAllDecls(TileEvents);
     //    std.testing.refAllDecls(BFSearch);
     //std.testing.refAllDecls(AStar);
+    std.testing.refAllDecls(EventSystem);
 }
