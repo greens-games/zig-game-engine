@@ -6,13 +6,11 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     //Deps
-    const raylib_dep = b.dependency("raylib-zig", .{
+    const raylib_dep = b.dependency("raylib", .{
         .target = target,
         .optimize = optimize,
+        .linux_display_backend = .X11,
     });
-    const raylib = raylib_dep.module("raylib"); // main raylib module
-    const raygui = raylib_dep.module("raygui"); // raygui module
-    const raylib_artifact = raylib_dep.artifact("raylib"); // raylib C library
 
     //create module
     const module = b.addModule("engine", .{
@@ -24,9 +22,8 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
-    module.linkLibrary(raylib_artifact);
-    module.addImport("raylib", raylib);
-    module.addImport("raygui", raygui);
+    const art = raylib_dep.artifact("raylib");
+    module.linkLibrary(art);
 
     const lib = b.addStaticLibrary(.{
         .name = "zig-last-try",
@@ -52,10 +49,7 @@ pub fn build(b: *std.Build) void {
     //exe.linkLibC();
 
     // Import the generated module.
-    exe.linkLibrary(raylib_artifact);
 
-    exe.root_module.addImport("raylib", raylib);
-    exe.root_module.addImport("raygui", raygui);
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);
@@ -83,8 +77,6 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
-    exe_unit_tests.root_module.addImport("raylib", raylib);
-    exe_unit_tests.root_module.addImport("raygui", raygui);
     const run_exe_unit_tests = b.addRunArtifact(exe_unit_tests);
 
     const test_step = b.step("test", "Run unit tests");

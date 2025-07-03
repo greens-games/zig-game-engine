@@ -1,11 +1,11 @@
 .{
-    .name = "zig-last-try",
+    .name = .zig_last_try,
     .version = "0.0.0",
-
+    .fingerprint = 0xdfc650b8965ec4d0,
     .dependencies = .{
-        .@"raylib-zig" = .{
-            .url = "https://github.com/Not-Nik/raylib-zig/archive/devel.tar.gz",
-            .hash = "122064a960fff658211413c4b3b56e1699719126c3d099d3ed43f9eaff17a936ad91", // put the actual hash here
+        .raylib = .{
+            .url = "git+https://github.com/raysan5/raylib#bbeade636cd8c90e18b7e9e841c20b5f8bd15d94",
+            .hash = "raylib-5.5.0-whq8uGZGzQDi3_L7tJzgEINoZN-HwmOs0zkkc2g7ysIZ",
         },
     },
     .paths = .{
