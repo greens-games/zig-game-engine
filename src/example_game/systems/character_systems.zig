@@ -55,7 +55,7 @@ pub fn moveUnit(characters: MultiArraylist(Character)) void {
     const char_slice = characters.slice();
     for (char_slice.items(.path), char_slice.items(.position), char_slice.items(.queued_state), char_slice.items(.curr_state)) |*move, *curr_position, *q_state, *c_state| {
         if (move.*.items.len > 0) {
-            const new_pos: Vector2 = move.*.pop();
+            const new_pos: Vector2 = move.*.pop() orelse @panic("UH OH FAILED moveUnit");
             curr_position.* = new_pos;
             if (move.*.items.len == 0) {
                 //Here we will set the c_state to q_state

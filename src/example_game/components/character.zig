@@ -1,6 +1,8 @@
 const std = @import("std");
 const allocator = std.heap.page_allocator;
-const rl = @import("raylib");
+const rl = @cImport({
+    @cInclude("raylib.h");
+});
 const Vector2 = @import("../../engine/core/types.zig").Vector2;
 const Arraylist = std.ArrayList;
 const ActionState = @import("./states.zig").ActionState;

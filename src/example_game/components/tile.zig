@@ -1,6 +1,7 @@
 const std = @import("std");
-const rl = @import("raylib");
-
+const rl = @cImport({
+    @cInclude("raylib.h");
+});
 pub const Tile = struct {
     row: i32,
     col: i32,

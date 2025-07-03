@@ -3,8 +3,9 @@ const VertexArray = @import("vertex_array.zig").VertexArray;
 const IndexBuffer = @import("index_buffer.zig").IndexBuffer;
 
 const World = @import("../engine/core/world.zig").World;
-const Color = @import("raylib").Color;
-const rl = @import("raylib");
+const rl = @cImport({
+    @cInclude("raylib.h");
+});
 const Constants = @import("../engine/core/constants.zig");
 const GridUtils = @import("../example_game/grid/grid_utils.zig");
 ///OpenGL renderer
@@ -30,7 +31,7 @@ pub const RaylibRenderer = struct {
     pub fn drawTeam(world: *World) void {
         for (world.characters_multi.slice().items(.position)) |pos| {
             const toWorld = GridUtils.gridToWorldCoords(pos.x, pos.y);
-            rl.drawRectangle(toWorld.x, toWorld.y, Constants.CELL_W, Constants.CELL_H, Color.blue);
+            rl.DrawRectangle(toWorld.x, toWorld.y, Constants.CELL_W, Constants.CELL_H, rl.BLUE);
         }
     }
 
@@ -38,17 +39,17 @@ pub const RaylibRenderer = struct {
         for (world.characters_multi.slice().items(.target_pos)) |target| {
             if (target.x >= 0 and target.y >= 0) {
                 const toWorld = GridUtils.gridToWorldCoords(target.x, target.y);
-                rl.drawRectangle(toWorld.x, toWorld.y, Constants.CELL_W, Constants.CELL_H, Color.green);
+                rl.DrawRectangle(toWorld.x, toWorld.y, Constants.CELL_W, Constants.CELL_H, rl.GREEN);
             }
         }
     }
 
     pub fn drawGrid() void {
         var r: i32 = 0;
-        while (r <= rl.getScreenHeight()) {
+        while (r <= rl.GetScreenHeight()) {
             var c: i32 = 0;
-            while (c <= rl.getScreenWidth()) {
-                rl.drawRectangleLines(c, r, Constants.CELL_W, Constants.CELL_H, Color.black);
+            while (c <= rl.GetScreenWidth()) {
+                rl.DrawRectangleLines(c, r, Constants.CELL_W, Constants.CELL_H, rl.BLACK);
                 c += Constants.CELL_W;
             }
             r += Constants.CELL_H;
@@ -59,10 +60,10 @@ pub const RaylibRenderer = struct {
     pub fn drawMap() void {
         for (0..15) |r| {
             for (0..20) |c| {
-                const color: Color = switch (World.tiles[r][c]) {
-                    .RESOURCE => Color.gold,
-                    .ENEMY => Color.red,
-                    else => Color.dark_green,
+                const color: rl.Color = switch (World.tiles[r][c]) {
+                    .RESOURCE => rl.GOLD,
+                    .ENEMY => rl.RED,
+                    else => rl.DARKGREEN,
                 };
                 const toWorld = GridUtils.gridToWorldCoords(@intCast(c), @intCast(r));
                 drawSquare(toWorld.x, toWorld.y, color);
@@ -71,6 +72,6 @@ pub const RaylibRenderer = struct {
     }
 
     pub fn drawSquare(x: i32, y: i32, color: rl.Color) void {
-        rl.drawRectangle(x, y, Constants.CELL_W, Constants.CELL_H, color);
+        rl.DrawRectangle(x, y, Constants.CELL_W, Constants.CELL_H, color);
     }
 };

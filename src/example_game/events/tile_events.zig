@@ -12,7 +12,7 @@ var key_producer_list: ArrayList(*TileClickEventProducer) = ArrayList(*TileClick
 pub fn update() void {
     for (key_producer_list.items) |producer| {
         if (producer.events.items.len > 0) {
-            while (producer.events.popOrNull()) |event| {
+            while (producer.events.pop()) |event| {
                 key_event_list.append(event) catch std.debug.panic("Failed to add event {?}\n", .{event});
             }
         }

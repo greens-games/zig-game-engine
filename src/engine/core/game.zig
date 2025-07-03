@@ -1,7 +1,9 @@
 const std = @import("std");
 const ArrayList = std.ArrayList;
 
-const rl = @import("raylib");
+const rl = @cImport({
+    @cInclude("raylib.h");
+});
 
 //probably get moved out
 const setup = @import("../../init/setup.zig");
@@ -88,7 +90,7 @@ pub const Game = struct {
 
     fn raylibRun(self: *Game) void {
         _ = self;
-        rl.setTargetFPS(60);
+        rl.SetTargetFPS(60);
         var world: World = .{};
         //var tile_event_system: TileEventSystem = .{};
         var tile_event_producer: TileEventSystem.TileClickEventProducer = .{};
@@ -104,14 +106,14 @@ pub const Game = struct {
         }
         const timer: Timer = Timer.init(5.0, true);
         // I think we want to run some systems slower (i.e moving)
-        while (!rl.windowShouldClose()) {
-            const curr_time: f64 = rl.getTime();
+        while (!rl.WindowShouldClose()) {
+            const curr_time: f64 = rl.GetTime();
             const delta_time = curr_time - last_frame_time;
             _ = delta_time; // autofix
             last_frame_time = curr_time;
             World.game_time = last_frame_time;
-            rl.beginDrawing();
-            defer rl.endDrawing();
+            rl.BeginDrawing();
+            defer rl.EndDrawing();
 
             //TIMER TESTING
             {
@@ -138,14 +140,14 @@ pub const Game = struct {
                 Renderer.drawGrid();
                 Renderer.drawTeam(&world);
             }
-            rl.clearBackground(rl.Color.white);
+            rl.ClearBackground(rl.WHITE);
         }
 
         std.debug.print("last_frame_time: {d}; \n", .{last_frame_time});
     }
 
     fn raylibCleanUp(self: *Game) void {
-        rl.closeWindow();
+        rl.CloseWindow();
         self.world.cleanUp();
     }
     fn openGLSetup(self: *Game) void {

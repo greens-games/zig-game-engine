@@ -3,7 +3,9 @@ const allocator = std.heap.page_allocator;
 const World = @import("../../engine/core/world.zig").World;
 const Characters = @import("../components/character.zig");
 const Color = @import("raylib").Color;
-const rl = @import("raylib");
+const rl = @cImport({
+    @cInclude("raylib.h");
+});
 const Vector2 = @import("../../engine/core/types.zig").Vector2;
 const assert = @import("../../engine/error/assert.zig").assert;
 
@@ -20,7 +22,7 @@ pub fn spawnTeam(world: *World) void {
         .hp = 10,
         .class_id = 0,
         //We can set the colour based on the class_id as well
-        .color = rl.Color.blue,
+        .color = rl.BLUE,
         .forestry_tool = Tools.ForestryTool.init(5.0),
     };
     world.spawn_character(character);

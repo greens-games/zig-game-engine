@@ -7,16 +7,18 @@ const GridUtils = @import("../grid/grid_utils.zig");
 const TileEventSystem = @import("../events/tile_events.zig");
 const TileType = @import("../components/tile.zig").TileType;
 //TODO: Abstract out the mouse stuff later
-const rl = @import("raylib");
+const rl = @cImport({
+    @cInclude("raylib.h");
+});
 ///Track the mouse and handle different click scnearios
 pub fn handleMouseInput(tile_event_producer: *TileEventSystem.TileClickEventProducer) void {
     const mouse_pos: Vector2 = .{
-        .x = rl.getMouseX(),
-        .y = rl.getMouseY(),
+        .x = rl.GetMouseX(),
+        .y = rl.GetMouseY(),
     };
 
     //Check if left-clicked
-    if (rl.isMouseButtonPressed(rl.MouseButton.mouse_button_left)) {
+    if (rl.IsMouseButtonPressed(rl.MOUSE_BUTTON_LEFT)) {
         const mouse_rc: Vector2 = GridUtils.worldToGridCoords(mouse_pos.x, mouse_pos.y);
         //what did we click on?
         // TODO: We could check if the position of the mouse collided with anything

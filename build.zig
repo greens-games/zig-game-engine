@@ -21,9 +21,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-
-    const art = raylib_dep.artifact("raylib");
-    module.linkLibrary(art);
+    _ = module;
 
     const lib = b.addStaticLibrary(.{
         .name = "zig-last-try",
@@ -42,14 +40,15 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const art = raylib_dep.artifact("raylib");
+    exe.linkLibrary(art);
+    exe.linkLibC();
     //CLibs
     //exe.linkSystemLibrary("glfw3");
     //exe.linkSystemLibrary("gl");
     //exe.addCSourceFile(.{ .file = b.path("../../utils/glad/src/gl.c") });
-    //exe.linkLibC();
 
     // Import the generated module.
-
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);
