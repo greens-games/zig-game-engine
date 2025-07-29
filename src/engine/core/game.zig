@@ -103,6 +103,7 @@ pub const Game = struct {
             //Init Map
             InitSystem.spawnTeam(&world);
             InitSystem.spawnTiles();
+            World.printTiles();
         }
         const timer: Timer = Timer.init(5.0, true);
         // I think we want to run some systems slower (i.e moving)
@@ -118,7 +119,7 @@ pub const Game = struct {
             //TIMER TESTING
             {
                 if (timer.isLooping and !timer.isRunning) {
-                    //                    timer.start();
+                    //timer.start();
                 }
             }
             //run systems
@@ -140,7 +141,7 @@ pub const Game = struct {
                 Renderer.drawGrid();
                 Renderer.drawTeam(&world);
             }
-            rl.ClearBackground(rl.WHITE);
+            rl.ClearBackground(rl.GRAY);
         }
 
         std.debug.print("last_frame_time: {d}; \n", .{last_frame_time});
